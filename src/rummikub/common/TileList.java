@@ -16,7 +16,6 @@ public class TileList {
 
     public void insertTile(Tile tile) throws Exception {
 //        if (listType == TileListType.ASCENDING) {
-//
 //        }
         list.add(tile);
     }
