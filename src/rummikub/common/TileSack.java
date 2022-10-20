@@ -6,6 +6,7 @@ import rummikub.common.utils.IllegalNumberException;
 import java.util.Random;
 
 public class TileSack {
+
     public TileList sack;
 
     public TileSack() {

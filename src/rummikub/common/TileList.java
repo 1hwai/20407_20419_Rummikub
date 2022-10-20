@@ -3,21 +3,26 @@ package rummikub.common;
 import java.util.ArrayList;
 
 public class TileList {
+    public TileListType listType;
     public ArrayList<Tile> list = new ArrayList<>();
 
     public TileList() {
 
     }
 
-    public void insertList(Tile tile) throws Exception {
-        if (isValidTile(tile)) {
-            list.add(tile);
-        } else {
+    public TileList(TileListType listType) {
+        this.listType = listType;
+    }
+
+    public void insertTile(Tile tile) throws Exception {
+        if (listType == TileListType.ASCENDING) {
 
         }
+        list.add(tile);
     }
 
-    public boolean isValidTile(Tile tile) {
-        return false;
+    public void insertTileList(TileList tilelist) {
+        this.list.addAll(tilelist.list);
     }
+
 }
