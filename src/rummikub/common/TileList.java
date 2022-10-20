@@ -5,6 +5,10 @@ import java.util.ArrayList;
 public class TileList {
     public ArrayList<Tile> list = new ArrayList<>();
 
+    public TileList() {
+
+    }
+
     public void insertList(Tile tile) throws Exception {
         if (isValidTile(tile)) {
             list.add(tile);
