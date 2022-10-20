@@ -15,14 +15,20 @@ public class TileList {
     }
 
     public void insertTile(Tile tile) throws Exception {
-        if (listType == TileListType.ASCENDING) {
-
-        }
+//        if (listType == TileListType.ASCENDING) {
+//
+//        }
         list.add(tile);
     }
 
     public void insertTileList(TileList tilelist) {
         this.list.addAll(tilelist.list);
+    }
+
+    public void print() {
+        for (Tile tile : list) {
+            tile.print();
+        }
     }
 
 }

@@ -14,21 +14,38 @@ public class Table {
         tableList.add(emptyTileList);
     }
 
-    public void setCurrentPlayer(Player player) {
+    public void update() {
+
+    }
+
+    private void validate() {
+
+    }
+
+    private void updateCurrentPlayer(Player player) {
         currentPlayer = player;
     }
 
-    public void insertTile(Tile tile, int idx) {
+    public void insertTile(Tile playerTile, int idx) {
         TileList tileList = tableList.get(idx);
         try {
-            tileList.insertTile(tile);
-
+            tileList.insertTile(playerTile);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void insertTileList(TileList tileList, int idx) {
+    public void insertTileList(TileList playerTileList, int idx) {
+        TileList tileList = tableList.get(idx);
+        tileList.insertTileList(playerTileList);
+    }
 
+    public void printTable() {
+        int i = 1;
+        for (TileList tileList : tableList) {
+            tileList.print();
+            if (i % 5 == 0) System.out.println();
+            i++;
+        }
     }
 }

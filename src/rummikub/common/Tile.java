@@ -18,7 +18,7 @@ public class Tile {
         return number < 14;
     }
 
-    public void printTile() {
-        System.out.println(color.getColorCode() + " " + number + Color.reset());
+    public void print() {
+        System.out.print(color.getColorCode() + " " + number + " " + Color.reset());
     }
 }

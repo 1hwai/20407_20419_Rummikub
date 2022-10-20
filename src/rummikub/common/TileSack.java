@@ -43,7 +43,7 @@ public class TileSack {
 
     public void showSack() {
         for (Tile tile : sack.list) {
-            tile.printTile();
+            tile.print();
         }
     }
 }
