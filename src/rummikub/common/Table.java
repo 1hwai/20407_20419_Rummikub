@@ -6,24 +6,32 @@ import java.util.ArrayList;
 
 public class Table {
     public ArrayList<TileList> tableList = new ArrayList<>();
-    public ArrayList<Player> players = new ArrayList<>();
-    public Player currentPlayer;
+    private final ArrayList<Player> players = new ArrayList<>();
+    private Player currentPlayer;
 
     public Table() {
         TileList emptyTileList = new TileList();
         tableList.add(emptyTileList);
+
+        currentPlayer = players.get(0);
     }
 
     public void update() {
-
+        validate();
+        updateCurrentPlayer();
     }
 
     private void validate() {
 
     }
 
-    private void updateCurrentPlayer(Player player) {
-        currentPlayer = player;
+    private void updateCurrentPlayer() {
+        int idx = (players.indexOf(currentPlayer) + 1) % players.size();
+        currentPlayer = players.get(idx);
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public void insertTile(Tile playerTile, int idx) {
@@ -33,19 +41,26 @@ public class Table {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        createEmptyTileList();
     }
 
     public void insertTileList(TileList playerTileList, int idx) {
         TileList tileList = tableList.get(idx);
         tileList.insertTileList(playerTileList);
+        createEmptyTileList();
+    }
+
+    private void createEmptyTileList() {
+        TileList tailTileList = tableList.get(tableList.size() - 1);
+        if (tailTileList.list.isEmpty()) return;
+        TileList emptyTileList = new TileList();
+        tableList.add(emptyTileList);
     }
 
     public void printTable() {
-        int i = 1;
         for (TileList tileList : tableList) {
             tileList.print();
-            if (i % 5 == 0) System.out.println();
-            i++;
+            System.out.println();
         }
     }
 }
