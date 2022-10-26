@@ -4,7 +4,7 @@ A Project for DataStructure
 
 Just for educational purposes
 
-All rights of rummikub.Rummikub (game, rule, etc.) reserved to rummikub.Rummikub
+All rights of Rummikub (game, rule, etc.) reserved to Rummikub
 
 
 Sunrin 2022 DataStructure Student Team Project
