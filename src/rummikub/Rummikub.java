@@ -4,8 +4,8 @@ import rummikub.common.Table;
 
 public class Rummikub {
 
-    private static Table table = new Table();
-
-    public static void init() {
+    public static void main(String[] args) {
+        new GameFrame();
     }
+
 }
