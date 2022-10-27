@@ -1,16 +1,32 @@
 package rummikub;
 
 import rummikub.common.Table;
-import rummikub.common.Tile;
-import rummikub.common.TileList;
-import rummikub.common.TileSack;
-import rummikub.common.utils.EmptySackException;
+import rummikub.common.tile.TileList;
+import rummikub.common.tile.TileSack;
 
 public class Rummikub {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-            System.out.print("afsdfff");
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
+        TileSack sack = new TileSack();
+        Table table = new Table();
+        TileList tileList1 = new TileList();
+        TileList tileList2 = new TileList();
+        TileList tileList3 = new TileList();
+        TileList tileList4 = new TileList();
+        for (int i = 0; i < 8; i++) {
+            tileList1.insertTile(sack.extractTile());
+            tileList2.insertTile(sack.extractTile());
+            tileList3.insertTile(sack.extractTile());
+            tileList4.insertTile(sack.extractTile());
+        }
+
+
+        table.insertTileList(tileList1, 0);
+        table.insertTileList(tileList3, 1);
+        table.insertTileList(tileList4, 2);
+
+        table.printTable();
+
+
     }
 }
