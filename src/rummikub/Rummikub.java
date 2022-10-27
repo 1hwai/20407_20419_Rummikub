@@ -1,13 +1,11 @@
 package rummikub;
 
 import rummikub.common.Table;
-import rummikub.common.tile.TileList;
-import rummikub.common.tile.TileSack;
 
 public class Rummikub {
 
-    private Table table = new Table();
+    private static Table table = new Table();
 
-    public void init() {
+    public static void init() {
     }
 }

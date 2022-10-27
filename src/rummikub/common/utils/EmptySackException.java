@@ -1,7 +1,7 @@
 package rummikub.common.utils;
 
 import rummikub.common.tile.Tile;
-import rummikub.common.tile.TileSack;
+import rummikub.common.TileSack;
 
 /**
  * The class EmptySackException throws exception

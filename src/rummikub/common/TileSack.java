@@ -1,5 +1,7 @@
-package rummikub.common.tile;
+package rummikub.common;
 
+import rummikub.common.tile.Tile;
+import rummikub.common.tile.TileList;
 import rummikub.common.utils.Color;
 import rummikub.common.utils.EmptySackException;
 import rummikub.common.utils.IllegalNumberException;
