@@ -1,4 +1,4 @@
-package rummikub.common;
+package rummikub.common.tile;
 
 import rummikub.common.utils.Color;
 import rummikub.common.utils.IllegalNumberException;

@@ -1,6 +1,9 @@
 package rummikub.common;
 
+import rummikub.common.player.Human;
 import rummikub.common.player.Player;
+import rummikub.common.tile.Tile;
+import rummikub.common.tile.TileList;
 
 import java.util.ArrayList;
 
@@ -13,6 +16,8 @@ public class Table {
         TileList emptyTileList = new TileList();
         tableList.add(emptyTileList);
 
+        //Prototype Player inserting code
+        players.add(new Human());
         currentPlayer = players.get(0);
     }
 

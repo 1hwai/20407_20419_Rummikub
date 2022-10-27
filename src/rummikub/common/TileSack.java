@@ -1,5 +1,7 @@
 package rummikub.common;
 
+import rummikub.common.tile.Tile;
+import rummikub.common.tile.TileList;
 import rummikub.common.utils.Color;
 import rummikub.common.utils.EmptySackException;
 import rummikub.common.utils.IllegalNumberException;
@@ -10,34 +12,30 @@ public class TileSack {
 
     public TileList sack;
 
-    public TileSack() {
+    public TileSack() throws IllegalNumberException {
         sack = new TileList();
         for (Color color : Color.values()) {
             for (int i = 1; i < 14; i++) {
-                try {
                     Tile tile = new Tile(i, color);
                     sack.list.add(tile);
                     sack.list.add(tile);
-                } catch (IllegalNumberException e) {
-                    e.printError();
-                }
             }
         }
-        try {
-            Tile blackJoker = new Tile(0, Color.BLACK);
-            Tile redJoker = new Tile(0, Color.RED);
-            sack.list.add(blackJoker);
-            sack.list.add(redJoker);
-        } catch (IllegalNumberException e) {
-            e.printError();
-        }
+        Tile blackJoker = new Tile(0, Color.BLACK);
+        Tile redJoker = new Tile(0, Color.RED);
+        sack.list.add(blackJoker);
+        sack.list.add(redJoker);
+    }
+
+    public boolean isExtractable() {
+        return !sack.list.isEmpty();
     }
 
     public Tile extractTile() throws EmptySackException {
-        if (sack.list.isEmpty()) throw new EmptySackException();
+        if (!isExtractable()) throw new EmptySackException();
+
         Random random = new Random();
         final int idx = random.nextInt(sack.list.size() - 1);
-
         Tile tile = sack.list.get(idx);
         sack.list.remove(idx);
         return tile;
