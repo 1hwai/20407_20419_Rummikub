@@ -1,4 +1,4 @@
-package rummikub.common;
+package rummikub.common.tile;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ public class TileList {
         this.listType = listType;
     }
 
-    public void insertTile(Tile tile) throws Exception {
+    public void insertTile(Tile tile) {
 //        if (listType == TileListType.ASCENDING) {
 //        }
         list.add(tile);

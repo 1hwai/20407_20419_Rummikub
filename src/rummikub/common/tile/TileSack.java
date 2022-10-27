@@ -1,4 +1,4 @@
-package rummikub.common;
+package rummikub.common.tile;
 
 import rummikub.common.utils.Color;
 import rummikub.common.utils.EmptySackException;
@@ -33,8 +33,12 @@ public class TileSack {
         }
     }
 
+    public boolean isExtractable() {
+        return !sack.list.isEmpty();
+    }
+
     public Tile extractTile() throws EmptySackException {
-        if (sack.list.isEmpty()) throw new EmptySackException();
+        if (!isExtractable()) throw new EmptySackException();
         Random random = new Random();
         final int idx = random.nextInt(sack.list.size() - 1);
 
