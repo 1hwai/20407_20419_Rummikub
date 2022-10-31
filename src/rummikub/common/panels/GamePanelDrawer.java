@@ -1,4 +1,4 @@
-package rummikub;
+package rummikub.common.panels;
 
 import rummikub.common.player.Player;
 

@@ -1,6 +1,5 @@
 package rummikub.common.panels;
 
-import rummikub.GamePanelDrawer;
 import rummikub.common.RummikubKeyAdapter;
 import rummikub.common.Table;
 import rummikub.common.player.Human;
