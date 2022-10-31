@@ -17,7 +17,9 @@ public class Table {
         tableList.add(emptyTileList);
 
         //Prototype Player inserting code
-        players.add(new Human());
+        players.add(new Human("hawon"));
+        players.add(new Human("donghyup"));
+
         currentPlayer = players.get(0);
     }
 
@@ -62,10 +64,4 @@ public class Table {
         tableList.add(emptyTileList);
     }
 
-    public void printTable() {
-        for (TileList tileList : tableList) {
-            tileList.print();
-            System.out.println();
-        }
-    }
 }

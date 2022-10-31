@@ -1,11 +1,12 @@
 package rummikub;
 
-import rummikub.common.Table;
+import javax.swing.*;
+import java.awt.*;
 
 public class Rummikub {
 
     public static void main(String[] args) {
-        new GameFrame();
+        EventQueue.invokeLater(GameFrame::new);
     }
 
 }

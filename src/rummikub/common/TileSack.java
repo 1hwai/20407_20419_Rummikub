@@ -2,7 +2,7 @@ package rummikub.common;
 
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
-import rummikub.common.utils.Color;
+import rummikub.common.utils.TileColor;
 import rummikub.common.utils.EmptySackException;
 import rummikub.common.utils.IllegalNumberException;
 
@@ -14,15 +14,15 @@ public class TileSack {
 
     public TileSack() throws IllegalNumberException {
         sack = new TileList();
-        for (Color color : Color.values()) {
+        for (TileColor color : TileColor.values()) {
             for (int i = 1; i < 14; i++) {
                     Tile tile = new Tile(i, color);
                     sack.list.add(tile);
                     sack.list.add(tile);
             }
         }
-        Tile blackJoker = new Tile(0, Color.BLACK);
-        Tile redJoker = new Tile(0, Color.RED);
+        Tile blackJoker = new Tile(0, TileColor.WHITE);
+        Tile redJoker = new Tile(0, TileColor.RED);
         sack.list.add(blackJoker);
         sack.list.add(redJoker);
     }
@@ -41,9 +41,4 @@ public class TileSack {
         return tile;
     }
 
-    public void showSack() {
-        for (Tile tile : sack.list) {
-            tile.print();
-        }
-    }
 }

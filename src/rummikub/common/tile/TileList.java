@@ -24,10 +24,4 @@ public class TileList {
         this.list.addAll(tilelist.list);
     }
 
-    public void print() {
-        for (Tile tile : list) {
-            tile.print();
-        }
-    }
-
 }
