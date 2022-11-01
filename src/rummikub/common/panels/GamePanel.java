@@ -116,9 +116,10 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
             }
             tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "RED_JOKER" + ".png")));
             tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "WHITE_JOKER" + ".png")));
-            System.out.println("Jokers have been Successfully loaded");
+            System.out.println(SOURCE + "RED_JOKER" + ".png" + " has been Successfully loaded");
+            System.out.println(SOURCE + "WHITE_JOKER" + ".png" + " has been Successfully loaded");
             plasticDeck = ImageIO.read(getClass().getResource("/resources/utils/plasticDeck.png"));
-            System.out.println("Plastic Deck has been Successfully loaded");
+            System.out.println("/resources/utils/plasticDeck.png has been Successfully loaded");
         } catch (IOException e) {
             System.out.println("IOException :");
             e.printStackTrace();
