@@ -2,10 +2,6 @@ package rummikub.common.player;
 
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
-import rummikub.common.utils.IllegalNumberException;
-import rummikub.common.utils.TileColor;
-
-import java.awt.*;
 
 public abstract class Player {
 

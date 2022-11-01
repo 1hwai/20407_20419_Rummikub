@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class TileList {
     public TileListType listType;
-    public ArrayList<Tile> list = new ArrayList<>();
+    private ArrayList<Tile> list = new ArrayList<>();
 
     public TileList() {
 
@@ -12,6 +12,10 @@ public class TileList {
 
     public TileList(TileListType listType) {
         this.listType = listType;
+    }
+
+    public ArrayList<Tile> getList() {
+        return list;
     }
 
     public void insertTile(Tile tile) {

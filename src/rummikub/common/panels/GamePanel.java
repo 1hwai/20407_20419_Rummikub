@@ -39,12 +39,12 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         this.setBackground(Color.BLACK);
         this.setFocusable(true);
         this.addKeyListener(new RummikubKeyAdapter());
-        loadImages();
 
         Timer timer = new Timer(DELAY, this);
         timer.start();
-
         running = true;
+
+        loadImages();
     }
 
     public void paintComponent(Graphics g) {
@@ -66,17 +66,29 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     @Override
     public void drawTable(Graphics g) {
-        for (TileList tileList : table.tableList) {
-            for (Tile tile : tileList.list) {
-
+        final int TABLE_WIDTH = GamePanel.SCREEN_WIDTH - UNIT * 2;
+        int i = 0;
+        int rowWidth = 0;
+        for (TileList tileList : table.getTableList()) {
+            int j = 0;
+            int listWidth = 2 * UNIT * tileList.getList().size();
+            if (rowWidth + listWidth > TABLE_WIDTH) {
+                rowWidth = 0;
+                i++;
             }
+            for (Tile tile : tileList.getList()) {
+                g.drawImage(getTileImg(tile), rowWidth + UNIT + 2 * UNIT * j, 3 * UNIT * (i + 1), Tile.width, Tile.height, null);
+                j++;
+            }
+            rowWidth += listWidth + 20;
+
         }
+
         drawPlayerDeck(g, table.getCurrentPlayer());
     }
 
     @Override
     public void drawPlayerDeck(Graphics g, Player player) {
-
         final int WIDTH = GamePanel.SCREEN_WIDTH * 3 / 5; // 1080
         final int HEIGHT = WIDTH / 4;   // 270
         int x = (GamePanel.SCREEN_WIDTH - WIDTH) / 2;
@@ -85,8 +97,8 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         if (player instanceof Human human) {
             TileList deck = human.getDeck();
             int i = 0;
-            for (Tile tile : deck.list) {
-                g.drawImage(getTileImg(tile), x + 2 * UNIT * i, y + (i > 18 ? HEIGHT / 2 : 0), 60, 80, null);
+            for (Tile tile : deck.getList()) {
+                g.drawImage(getTileImg(tile), x + 2 * UNIT * i, y + (i > 18 ? HEIGHT / 2 : 0), Tile.width, Tile.height, null);
                 i++;
             }
         }

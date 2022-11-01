@@ -1,15 +1,14 @@
 package rummikub.common.tile;
 
 import rummikub.common.utils.TileColor;
-import rummikub.common.utils.IllegalNumberException;
 
 public class Tile {
     public int number;
     public TileColor color;
 
-    public Tile(int number, TileColor color) throws IllegalNumberException {
-        if (!isValidNumber(number)) throw new IllegalNumberException();
+    public static final int width = 60, height = 80;
 
+    public Tile(int number, TileColor color) {
         this.number = number;
         this.color = color;
     }

@@ -4,13 +4,15 @@ import rummikub.common.player.Human;
 import rummikub.common.player.Player;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
+import rummikub.common.utils.EmptySackException;
 
 import java.util.ArrayList;
 
 public class Table {
-    public ArrayList<TileList> tableList = new ArrayList<>();
+    private final ArrayList<TileList> tableList = new ArrayList<>();
     private final ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
+    private final TileSack sack = new TileSack();
 
     public Table() {
         TileList emptyTileList = new TileList();
@@ -21,6 +23,30 @@ public class Table {
         players.add(new Human("donghyup"));
 
         currentPlayer = players.get(0);
+
+        test();
+    }
+
+    private void test() {
+        try {
+
+            //test case 1
+//            for (int i = 0; i < 8; i++) {
+//                TileList list = new TileList();
+//                for (int j = 0; j < 13; j++) {
+//                    list.insertTile(sack.extractTile());
+//                }
+//                insertTileList(list, i);
+//            }
+
+            //test case 2
+            for (int i = 0; i < 105; i++) {
+                insertTile(sack.extractTile(), i);
+            }
+
+        } catch (EmptySackException e) {
+            e.printException();
+        }
     }
 
     public void update() {
@@ -41,6 +67,10 @@ public class Table {
         return currentPlayer;
     }
 
+    public ArrayList<TileList> getTableList() {
+        return tableList;
+    }
+
     public void insertTile(Tile playerTile, int idx) {
         TileList tileList = tableList.get(idx);
         try {
@@ -59,7 +89,7 @@ public class Table {
 
     private void createEmptyTileList() {
         TileList tailTileList = tableList.get(tableList.size() - 1);
-        if (tailTileList.list.isEmpty()) return;
+        if (tailTileList.getList().isEmpty()) return;
         TileList emptyTileList = new TileList();
         tableList.add(emptyTileList);
     }
