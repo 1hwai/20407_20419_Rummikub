@@ -127,6 +127,14 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     }
 
+    /**
+     * @author 1hwai
+     * @param tile  The tile that is wanted to get the image of it.
+     * @return {@code BufferedImage} image of the tile.
+     * <p>
+     *     Since there was a significant issue caused by this, be careful to fix the return statement.
+     * </p>
+     */
     public BufferedImage getTileImg(Tile tile) {
         if (tile.number == 0) {
             if (tile.color == TileColor.WHITE) return tileImages.get(tileImages.size() - 1);
