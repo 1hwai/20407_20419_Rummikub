@@ -12,6 +12,7 @@ public class Table {
     private final ArrayList<TileList> tableList = new ArrayList<>();
     private final ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
+
     private final TileSack sack = new TileSack();
 
     public Table() {
@@ -40,7 +41,7 @@ public class Table {
 //            }
 
             //test case 2
-            for (int i = 0; i < 105; i++) {
+            for (int i = 0; i < 106; i++) {
                 insertTile(sack.extractTile(), i);
             }
 

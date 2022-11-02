@@ -28,4 +28,10 @@ public class TileList {
         this.list.addAll(tilelist.list);
     }
 
+    public Tile extractTile(int idx) {
+        Tile tile = list.get(idx);
+        list.remove(idx);
+        return tile;
+    }
+
 }

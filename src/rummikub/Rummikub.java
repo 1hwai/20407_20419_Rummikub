@@ -1,6 +1,5 @@
 package rummikub;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class Rummikub {

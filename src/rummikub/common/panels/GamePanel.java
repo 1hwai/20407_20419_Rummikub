@@ -124,6 +124,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
             System.out.println("IOException :");
             e.printStackTrace();
         }
+
     }
 
     public BufferedImage getTileImg(Tile tile) {
@@ -138,7 +139,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
             i++;
         }
 
-        return tileImages.get(10 * i + tile.number - 1);
+        return tileImages.get(13 * i + tile.number - 1);
     }
 
     @Override

@@ -9,21 +9,20 @@ import java.util.Random;
 
 public class TileSack {
 
-    public TileList sack;
+    private final TileList sack = new TileList();
 
     public TileSack() {
-        sack = new TileList();
         for (TileColor color : TileColor.values()) {
             for (int i = 1; i < 14; i++) {
                     Tile tile = new Tile(i, color);
-                    sack.getList().add(tile);
-                    sack.getList().add(tile);
+                    sack.insertTile(tile);
+                    sack.insertTile(tile);
             }
         }
         Tile blackJoker = new Tile(0, TileColor.WHITE);
         Tile redJoker = new Tile(0, TileColor.RED);
-        sack.getList().add(blackJoker);
-        sack.getList().add(redJoker);
+        sack.insertTile(blackJoker);
+        sack.insertTile(redJoker);
     }
 
     public boolean isExtractable() {
@@ -34,10 +33,10 @@ public class TileSack {
         if (!isExtractable()) throw new EmptySackException();
 
         Random random = new Random();
-        final int idx = random.nextInt(sack.getList().size() - 1);
-        Tile tile = sack.getList().get(idx);
-        sack.getList().remove(idx);
-        return tile;
+        int size = sack.getList().size();
+        final int idx = random.nextInt(size);
+
+        return sack.extractTile(idx);
     }
 
 }
