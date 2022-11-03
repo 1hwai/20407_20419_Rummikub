@@ -9,7 +9,7 @@ public class GameFrame extends JFrame {
         super("Rummikub");
         this.add(new GamePanel());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
+        this.setResizable(true);
         this.pack();
         this.setVisible(true);
         this.setLocationRelativeTo(null);

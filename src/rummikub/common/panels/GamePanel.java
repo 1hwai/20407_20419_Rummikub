@@ -6,6 +6,7 @@ import rummikub.common.player.Human;
 import rummikub.common.player.Player;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
+import rummikub.common.utils.Coordinate;
 import rummikub.common.utils.TileColor;
 
 import javax.imageio.ImageIO;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener {
 
     public static final int SCREEN_WIDTH = 1800;
-    public static final int SCREEN_HEIGHT = 1200;
+    public static final int SCREEN_HEIGHT = 900;
 
     private static final int FPS = 60;
     private static final int DELAY = 1000 / FPS;
@@ -31,6 +32,11 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     private final ArrayList<BufferedImage> tileImages = new ArrayList<>();
     private BufferedImage plasticDeck = null;
+    private BufferedImage nextTurnBtn = null;
+    private final int NEXT_TURN_WIDTH = 130;
+    private final int NEXT_TURN_HEIGHT = 120;
+
+    public static Coordinate selector = new Coordinate(0, 0);
 
     private final Table table = new Table();
 
@@ -45,6 +51,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         running = true;
 
         loadImages();
+        MouseListener();
     }
 
     public void paintComponent(Graphics g) {
@@ -55,6 +62,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     public void draw(Graphics g) {
         drawIndicators(g);
         drawTable(g);
+        System.out.println("Selector : " + selector.getX());
     }
 
     @Override
@@ -62,6 +70,12 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         g.setFont(COURIER_NEW);
         g.setColor(Color.white);
         g.drawString("Current Player : " + table.getCurrentPlayer().getId(), UNIT, UNIT);
+
+        drawNextTurnBtn(g);
+    }
+
+    public void drawNextTurnBtn(Graphics g) {
+        g.drawImage(nextTurnBtn, SCREEN_WIDTH - 200, SCREEN_HEIGHT - 200, NEXT_TURN_WIDTH, NEXT_TURN_HEIGHT, null);
     }
 
     @Override
@@ -118,8 +132,13 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
             tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "WHITE_JOKER" + ".png")));
             System.out.println(SOURCE + "RED_JOKER" + ".png" + " has been Successfully loaded");
             System.out.println(SOURCE + "WHITE_JOKER" + ".png" + " has been Successfully loaded");
+
             plasticDeck = ImageIO.read(getClass().getResource("/resources/utils/plasticDeck.png"));
             System.out.println("/resources/utils/plasticDeck.png has been Successfully loaded");
+
+            nextTurnBtn = ImageIO.read(getClass().getResource("/resources/indicators/nextTurnBtn.png"));
+            System.out.println("/resources/indicators/nextTurnBtn has been Successfully loaded");
+
         } catch (IOException e) {
             System.out.println("IOException :");
             e.printStackTrace();
@@ -157,4 +176,19 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         repaint();
     }
 
+    public void MouseListener() {
+        addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                int x = e.getX();
+                int y = e.getY();
+                if (SCREEN_WIDTH - 200 < x && x < SCREEN_WIDTH - 200 + NEXT_TURN_WIDTH) {
+                    if (SCREEN_HEIGHT - 200 < y && y < SCREEN_HEIGHT - 200 + NEXT_TURN_HEIGHT) {
+                        System.out.println("NextTurnBtn has been Clicked!");
+                    }
+                }
+            }
+        });
+
+
+    }
 }

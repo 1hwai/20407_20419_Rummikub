@@ -29,25 +29,25 @@ public class Table {
     }
 
     private void test() {
-        try {
-
-            //test case 1
-            for (int i = 0; i < 8; i++) {
-                TileList list = new TileList();
-                for (int j = 0; j < 13; j++) {
-                    list.insertTile(sack.extractTile());
-                }
-                insertTileList(list, i);
-            }
-
-            //test case 2
-//            for (int i = 0; i < 106; i++) {
-//                insertTile(sack.extractTile(), i);
+//        try {
+//
+//            //test case 1
+//            for (int i = 0; i < 8; i++) {
+//                TileList list = new TileList();
+//                for (int j = 0; j < 13; j++) {
+//                    list.insertTile(sack.extractTile());
+//                }
+//                insertTileList(list, i);
 //            }
-
-        } catch (EmptySackException e) {
-            e.printException();
-        }
+//
+//            //test case 2
+////            for (int i = 0; i < 106; i++) {
+////                insertTile(sack.extractTile(), i);
+////            }
+//
+//        } catch (EmptySackException e) {
+//            e.printException();
+//        }
     }
 
     public void update() {
