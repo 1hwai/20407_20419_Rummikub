@@ -139,9 +139,9 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
             System.out.println("/resources/utils/plasticDeck.png has been Successfully loaded");
 
             nextTurnBtn = ImageIO.read(getClass().getResource("/resources/indicators/nextTurnBtn.png"));
-            System.out.println("/resources/indicators/nextTurnBtn has been Successfully loaded");
+            System.out.println("/resources/indicators/nextTurnBtn.png has been Successfully loaded");
             resetBtn = ImageIO.read(getClass().getResource("/resources/indicators/resetBtn.png"));
-            System.out.println("/resources/indicators/resetBtn has been Successfully loaded");
+            System.out.println("/resources/indicators/resetBtn.png has been Successfully loaded");
 
         } catch (IOException e) {
             System.out.println("IOException :");
