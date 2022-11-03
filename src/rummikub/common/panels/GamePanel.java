@@ -35,6 +35,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     private BufferedImage nextTurnBtn = null;
     private final int NEXT_TURN_WIDTH = 130;
     private final int NEXT_TURN_HEIGHT = 120;
+    private BufferedImage resetBtn = null;
 
     public static Coordinate selector = new Coordinate(0, 0);
 
@@ -71,11 +72,12 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         g.setColor(Color.white);
         g.drawString("Current Player : " + table.getCurrentPlayer().getId(), UNIT, UNIT);
 
-        drawNextTurnBtn(g);
+        drawBtns(g);
     }
 
-    public void drawNextTurnBtn(Graphics g) {
+    public void drawBtns(Graphics g) {
         g.drawImage(nextTurnBtn, SCREEN_WIDTH - 200, SCREEN_HEIGHT - 200, NEXT_TURN_WIDTH, NEXT_TURN_HEIGHT, null);
+        g.drawImage(resetBtn, 100, SCREEN_HEIGHT - 200, 120, 120, null);
     }
 
     @Override
@@ -138,6 +140,8 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
             nextTurnBtn = ImageIO.read(getClass().getResource("/resources/indicators/nextTurnBtn.png"));
             System.out.println("/resources/indicators/nextTurnBtn has been Successfully loaded");
+            resetBtn = ImageIO.read(getClass().getResource("/resources/indicators/resetBtn.png"));
+            System.out.println("/resources/indicators/resetBtn has been Successfully loaded");
 
         } catch (IOException e) {
             System.out.println("IOException :");
@@ -184,6 +188,12 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 if (SCREEN_WIDTH - 200 < x && x < SCREEN_WIDTH - 200 + NEXT_TURN_WIDTH) {
                     if (SCREEN_HEIGHT - 200 < y && y < SCREEN_HEIGHT - 200 + NEXT_TURN_HEIGHT) {
                         System.out.println("NextTurnBtn has been Clicked!");
+                    }
+                }
+
+                if (100 < x && x < 220 + NEXT_TURN_WIDTH) {
+                    if (SCREEN_HEIGHT - 200 < y && y < SCREEN_HEIGHT - 80) {
+                        System.out.println("ResetBtn has been Clicked!");
                     }
                 }
             }
