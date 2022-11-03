@@ -2,6 +2,8 @@ package rummikub.common.panels;
 
 import rummikub.common.RummikubKeyAdapter;
 import rummikub.common.Table;
+import rummikub.common.panels.buttons.NextTurnButton;
+import rummikub.common.panels.buttons.ResetButton;
 import rummikub.common.player.Human;
 import rummikub.common.player.Player;
 import rummikub.common.tile.Tile;
@@ -32,12 +34,10 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     private final ArrayList<BufferedImage> tileImages = new ArrayList<>();
     private BufferedImage plasticDeck = null;
-    private BufferedImage nextTurnBtn = null;
-    private final int NEXT_TURN_WIDTH = 130;
-    private final int NEXT_TURN_HEIGHT = 120;
-    private BufferedImage resetBtn = null;
+    private NextTurnButton nextTurnBtn;
+    private ResetButton resetBtn;
 
-    public static Coordinate selector = new Coordinate(0, 0);
+    public static Point selector = new Point(0, 0);
 
     private final Table table = new Table();
 
@@ -51,6 +51,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         timer.start();
         running = true;
 
+        initButtons();
         loadImages();
         MouseListener();
     }
@@ -72,12 +73,15 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         g.setColor(Color.white);
         g.drawString("Current Player : " + table.getCurrentPlayer().getId(), UNIT, UNIT);
 
-        drawBtns(g);
+        drawButtons(g);
     }
 
-    public void drawBtns(Graphics g) {
-        g.drawImage(nextTurnBtn, SCREEN_WIDTH - 200, SCREEN_HEIGHT - 200, NEXT_TURN_WIDTH, NEXT_TURN_HEIGHT, null);
-        g.drawImage(resetBtn, 100, SCREEN_HEIGHT - 200, 120, 120, null);
+    @Override
+    public void drawButtons(Graphics g) {
+        g.drawImage(nextTurnBtn.getImage(), nextTurnBtn.position.x, nextTurnBtn.position.y,
+                nextTurnBtn.width, nextTurnBtn.height, null);
+        g.drawImage(resetBtn.getImage(), resetBtn.position.x, resetBtn.position.y,
+                resetBtn.width, resetBtn.height, null);
     }
 
     @Override
@@ -120,6 +124,11 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         }
     }
 
+    private void initButtons() {
+        nextTurnBtn = new NextTurnButton(new Point(SCREEN_WIDTH - 200, SCREEN_HEIGHT - 200));
+        resetBtn = new ResetButton(new Point(100, SCREEN_HEIGHT - 200));
+    }
+
     public void loadImages() {
         try {
             final String SOURCE = "/resources/tiles/";
@@ -138,9 +147,9 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
             plasticDeck = ImageIO.read(getClass().getResource("/resources/utils/plasticDeck.png"));
             System.out.println("/resources/utils/plasticDeck.png has been Successfully loaded");
 
-            nextTurnBtn = ImageIO.read(getClass().getResource("/resources/indicators/nextTurnBtn.png"));
+            nextTurnBtn.setImage("/resources/indicators/nextTurnBtn.png");
             System.out.println("/resources/indicators/nextTurnBtn.png has been Successfully loaded");
-            resetBtn = ImageIO.read(getClass().getResource("/resources/indicators/resetBtn.png"));
+            resetBtn.setImage("/resources/indicators/resetBtn.png");
             System.out.println("/resources/indicators/resetBtn.png has been Successfully loaded");
 
         } catch (IOException e) {
@@ -183,22 +192,19 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     public void MouseListener() {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                int x = e.getX();
-                int y = e.getY();
-                if (SCREEN_WIDTH - 200 < x && x < SCREEN_WIDTH - 200 + NEXT_TURN_WIDTH) {
-                    if (SCREEN_HEIGHT - 200 < y && y < SCREEN_HEIGHT - 200 + NEXT_TURN_HEIGHT) {
-                        System.out.println("NextTurnBtn has been Clicked!");
-                    }
-                }
-
-                if (100 < x && x < 220 + NEXT_TURN_WIDTH) {
-                    if (SCREEN_HEIGHT - 200 < y && y < SCREEN_HEIGHT - 80) {
-                        System.out.println("ResetBtn has been Clicked!");
-                    }
-                }
+                Point mp = new Point(e.getX(), e.getY());
+                nextTurnBtn.ifButtonClicked(mp, () -> {
+                    System.out.println("Next!");
+                    return null;
+                });
+                resetBtn.ifButtonClicked(mp, () -> {
+                    System.out.println("Reset!");
+                    return null;
+                });
             }
         });
 
 
     }
+
 }

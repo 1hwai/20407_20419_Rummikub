@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class TileList {
     public TileListType listType;
-    private ArrayList<Tile> list = new ArrayList<>();
+    private final ArrayList<Tile> list = new ArrayList<>();
 
     public TileList() {
 
@@ -19,8 +19,6 @@ public class TileList {
     }
 
     public void insertTile(Tile tile) {
-//        if (listType == TileListType.ASCENDING) {
-//        }
         list.add(tile);
     }
 

@@ -8,6 +8,8 @@ public interface GamePanelDrawer {
 
     void drawIndicators(Graphics g);
 
+    void drawButtons(Graphics g);
+
     void drawTable(Graphics g);
 
     void drawPlayerDeck(Graphics g, Player player);
