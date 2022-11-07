@@ -55,4 +55,5 @@ public abstract class Button {
     public BufferedImage getImage() {
         return image;
     }
+
 }

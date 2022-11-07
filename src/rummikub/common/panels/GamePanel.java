@@ -8,7 +8,6 @@ import rummikub.common.player.Human;
 import rummikub.common.player.Player;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
-import rummikub.common.utils.Coordinate;
 import rummikub.common.utils.TileColor;
 
 import javax.imageio.ImageIO;
@@ -37,8 +36,6 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     private NextTurnButton nextTurnBtn;
     private ResetButton resetBtn;
 
-    public static Point selector = new Point(0, 0);
-
     private final Table table = new Table();
 
     public GamePanel() {
@@ -61,10 +58,9 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         draw(g);
     }
 
-    public void draw(Graphics g) {
+    private void draw(Graphics g) {
         drawIndicators(g);
         drawTable(g);
-        System.out.println("Selector : " + selector.getX());
     }
 
     @Override
@@ -113,12 +109,14 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         final int HEIGHT = WIDTH / 4;   // 270
         int x = (GamePanel.SCREEN_WIDTH - WIDTH) / 2;
         int y = GamePanel.SCREEN_HEIGHT - HEIGHT;
+
         g.drawImage(plasticDeck, x, y, WIDTH, HEIGHT, null);
+
         if (player instanceof Human human) {
             TileList deck = human.getDeck();
             int i = 0;
             for (Tile tile : deck.getList()) {
-                g.drawImage(getTileImg(tile), x + 2 * UNIT * i, y + (i > 18 ? HEIGHT / 2 : 0), Tile.width, Tile.height, null);
+                g.drawImage(getTileImg(tile), x + 2 * UNIT * (i % 18), y + HEIGHT * (i / 18) / 3, Tile.width, Tile.height, null);
                 i++;
             }
         }
@@ -129,7 +127,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         resetBtn = new ResetButton(new Point(100, SCREEN_HEIGHT - 200));
     }
 
-    public void loadImages() {
+    private void loadImages() {
         try {
             final String SOURCE = "/resources/tiles/";
             for (TileColor color : TileColor.values()) {
@@ -167,7 +165,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
      *     Since there was a significant issue caused by this, be careful to fix the return statement.
      * </p>
      */
-    public BufferedImage getTileImg(Tile tile) {
+    private BufferedImage getTileImg(Tile tile) {
         if (tile.number == 0) {
             if (tile.color == TileColor.WHITE) return tileImages.get(tileImages.size() - 1);
             else return tileImages.get(tileImages.size() - 2);
@@ -189,12 +187,14 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         repaint();
     }
 
-    public void MouseListener() {
+    private void MouseListener() {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 Point mp = new Point(e.getX(), e.getY());
+
                 nextTurnBtn.ifButtonClicked(mp, () -> {
                     System.out.println("Next!");
+                    table.next();
                     return null;
                 });
                 resetBtn.ifButtonClicked(mp, () -> {
@@ -203,8 +203,6 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 });
             }
         });
-
-
     }
 
 }

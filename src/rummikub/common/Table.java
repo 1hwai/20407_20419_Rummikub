@@ -12,6 +12,7 @@ public class Table {
     private final ArrayList<TileList> tableList = new ArrayList<>();
     private final ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
+    private boolean hasExtracted = false;
 
     private final TileSack sack = new TileSack();
 
@@ -29,7 +30,7 @@ public class Table {
     }
 
     private void test() {
-        try {
+//        try {
 
             //test case 1
 //            for (int i = 0; i < 8; i++) {
@@ -41,18 +42,25 @@ public class Table {
 //            }
 
             //test case 2
-            for (int i = 0; i < 106; i++) {
-                insertTile(sack.extractTile(), i);
-            }
+//            for (int i = 0; i < 106; i++) {
+//                insertTile(sack.extractTile(), i);
+//            }
 
-        } catch (EmptySackException e) {
-            e.printException();
-        }
+//        } catch (EmptySackException e) {
+//            e.printException();
+//        }
     }
 
-    public void update() {
+    public void next() {
         validate();
+        try {
+            if (!hasExtracted) currentPlayer.insertTileToDeck(sack.extractTile());
+        } catch (EmptySackException e) {
+            hasExtracted = true;
+        }
+
         updateCurrentPlayer();
+        hasExtracted = false;
     }
 
     private void validate() {
