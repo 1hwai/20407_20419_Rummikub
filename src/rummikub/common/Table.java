@@ -12,7 +12,7 @@ public class Table {
     private final ArrayList<TileList> tableList = new ArrayList<>();
     private final ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
-    private boolean hasExtracted = false;
+    private boolean hasChanged = false;
 
     private final TileSack sack = new TileSack();
 
@@ -54,13 +54,13 @@ public class Table {
     public void next() {
         validate();
         try {
-            if (!hasExtracted) currentPlayer.insertTileToDeck(sack.extractTile());
+            if (!hasChanged) currentPlayer.insertTileToDeck(sack.extractTile());
         } catch (EmptySackException e) {
-            hasExtracted = true;
+            hasChanged = true;
         }
 
         updateCurrentPlayer();
-        hasExtracted = false;
+        hasChanged = false;
     }
 
     private void validate() {

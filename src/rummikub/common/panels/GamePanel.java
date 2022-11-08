@@ -1,6 +1,5 @@
 package rummikub.common.panels;
 
-import rummikub.common.RummikubKeyAdapter;
 import rummikub.common.Table;
 import rummikub.common.panels.buttons.NextTurnButton;
 import rummikub.common.panels.buttons.ResetButton;
@@ -8,6 +7,8 @@ import rummikub.common.player.Human;
 import rummikub.common.player.Player;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
+import rummikub.common.utils.Direction;
+import rummikub.common.utils.Pointer;
 import rummikub.common.utils.TileColor;
 
 import javax.imageio.ImageIO;
@@ -36,6 +37,14 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     private NextTurnButton nextTurnBtn;
     private ResetButton resetBtn;
 
+    /**
+     * A variable to save where the mouse is pointing.
+     *
+     * @serial
+     * @see RummikubKeyAdapter
+     */
+    private static final Pointer pointer = new Pointer();
+
     private final Table table = new Table();
 
     public GamePanel() {
@@ -61,6 +70,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     private void draw(Graphics g) {
         drawIndicators(g);
         drawTable(g);
+        drawPointer(g);
     }
 
     @Override
@@ -70,6 +80,14 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         g.drawString("Current Player : " + table.getCurrentPlayer().getId(), UNIT, UNIT);
 
         drawButtons(g);
+    }
+
+    public void drawPointer(Graphics g) {
+//        int x1 = pointer.getI() * Tile.width;
+//        int y1 = pointer.getY() * Tile.height + Tile.height + 5;
+//        g.setColor(Color.WHITE);
+//
+//        g.drawLine(x1 - 5, y1, x1 + Tile.width + 5, y1);
     }
 
     @Override
@@ -161,9 +179,6 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
      * @author 1hwai
      * @param tile  The tile that is wanted to get the image of it.
      * @return {@code BufferedImage} image of the tile.
-     * <p>
-     *     Since there was a significant issue caused by this, be careful to fix the return statement.
-     * </p>
      */
     private BufferedImage getTileImg(Tile tile) {
         if (tile.number == 0) {
@@ -205,4 +220,23 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         });
     }
 
+    private static final class RummikubKeyAdapter extends KeyAdapter{
+
+        public RummikubKeyAdapter() {
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_W -> pointer.move(Direction.UP);
+                case KeyEvent.VK_A -> pointer.move(Direction.LEFT);
+                case KeyEvent.VK_S -> pointer.move(Direction.DOWN);
+                case KeyEvent.VK_D -> pointer.move(Direction.RIGHT);
+
+                case KeyEvent.VK_TAB -> {
+
+                }
+            }
+        }
+    }
 }
