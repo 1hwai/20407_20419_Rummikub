@@ -7,7 +7,7 @@ import rummikub.common.player.Human;
 import rummikub.common.player.Player;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
-import rummikub.common.utils.Direction;
+import rummikub.common.utils.Movement;
 import rummikub.common.utils.Pointer;
 import rummikub.common.utils.TileColor;
 
@@ -84,8 +84,8 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     public void drawPointer(Graphics g) {
 //        int x1 = pointer.getI() * Tile.width;
-//        int y1 = pointer.getY() * Tile.height + Tile.height + 5;
-//        g.setColor(Color.WHITE);
+//        int y1 = pointer.getJ() * Tile.height + Tile.height + 5;
+//        g.setColor(Color.decode("#02cff7"));
 //
 //        g.drawLine(x1 - 5, y1, x1 + Tile.width + 5, y1);
     }
@@ -111,8 +111,18 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 i++;
             }
             for (Tile tile : tileList.getList()) {
-                g.drawImage(getTileImg(tile), rowWidth + UNIT + 2 * UNIT * j, 3 * UNIT * (i + 1), Tile.width, Tile.height, null);
+                int x = rowWidth + UNIT + 2 * UNIT * j;
+                int y = 3 * UNIT * (i + 1);
+                g.drawImage(getTileImg(tile), x, y, Tile.width, Tile.height, null);
                 j++;
+                if (pointer.isOn(i, j)) {
+                    g.drawLine(x, y + Tile.height + 5, x + Tile.width + 5, y + Tile.height + 5);
+                }
+            }
+            pointer.printPosition();
+            if (tileList.getList().isEmpty()) {
+                pointer.printPosition();
+                g.drawLine(UNIT, y + Tile.height + 5, x + Tile.width + 5, y + Tile.height + 5);
             }
             rowWidth += listWidth + 20;
 
@@ -228,14 +238,10 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         @Override
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_W -> pointer.move(Direction.UP);
-                case KeyEvent.VK_A -> pointer.move(Direction.LEFT);
-                case KeyEvent.VK_S -> pointer.move(Direction.DOWN);
-                case KeyEvent.VK_D -> pointer.move(Direction.RIGHT);
-
-                case KeyEvent.VK_TAB -> {
-
-                }
+                case KeyEvent.VK_Q -> pointer.move(Movement.QUICK_LEFT);
+                case KeyEvent.VK_A -> pointer.move(Movement.LEFT);
+                case KeyEvent.VK_E -> pointer.move(Movement.QUICK_RIGHT);
+                case KeyEvent.VK_D -> pointer.move(Movement.RIGHT);
             }
         }
     }

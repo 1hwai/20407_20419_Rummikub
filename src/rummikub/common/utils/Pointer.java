@@ -1,7 +1,5 @@
 package rummikub.common.utils;
 
-import java.awt.*;
-
 public class Pointer {
 
     private int i = 0, j = 0;
@@ -15,11 +13,11 @@ public class Pointer {
         isDeckSide = !isDeckSide;
     }
 
-    public void move(Direction direction) {
+    public void move(Movement direction) {
         switch (direction) {
-//            case UP -> point.move(point.x, point.y - 1);
-//            case DOWN -> point.move(point.x, point.y + 1);
+            case QUICK_LEFT -> i--;
             case LEFT -> j--;
+            case QUICK_RIGHT -> i++;
             case RIGHT -> j++;
         }
     }
@@ -30,5 +28,14 @@ public class Pointer {
 
     public int getJ() {
         return j;
+    }
+
+    public void printPosition() {
+        System.out.println("fdsffsdf");
+        System.out.println(i + ", " + j);
+    }
+
+    public boolean isOn(int i, int j) {
+        return i == getI() && j == getJ();
     }
 }

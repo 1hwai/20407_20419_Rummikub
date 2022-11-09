@@ -1,7 +1,9 @@
 package rummikub.common.player;
 
+import rummikub.common.TileSack;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
+import rummikub.common.utils.EmptySackException;
 
 public abstract class Player {
 
@@ -12,6 +14,16 @@ public abstract class Player {
 
     public Player(String id) {
         this.id = id;
+    }
+
+    public void init(TileSack sack) {
+        try {
+            for (int i = 0; i < 14; i++) {
+                deck.insertTile(sack.extractTile());
+            }
+        } catch (EmptySackException e) {
+            e.printStackTrace();
+        }
     }
 
     public TileList getDeck() {

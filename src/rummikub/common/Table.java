@@ -23,6 +23,7 @@ public class Table {
         //Prototype Player inserting code
         players.add(new Human("hawon"));
         players.add(new Human("donghyup"));
+        players.forEach(p -> p.init(sack));
 
         currentPlayer = players.get(0);
 
