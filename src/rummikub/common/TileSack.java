@@ -25,10 +25,6 @@ public class TileSack {
         sack.insertTile(redJoker);
     }
 
-    public boolean isExtractable() {
-        return !sack.getList().isEmpty();
-    }
-
     public Tile extractTile() throws EmptySackException {
         if (!isExtractable()) throw new EmptySackException();
 
@@ -37,6 +33,10 @@ public class TileSack {
         final int idx = random.nextInt(size);
 
         return sack.extractTile(idx);
+    }
+
+    public boolean isExtractable() {
+        return !sack.getList().isEmpty();
     }
 
 }

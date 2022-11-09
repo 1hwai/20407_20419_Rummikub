@@ -13,13 +13,6 @@ public abstract class Button {
     public final int width, height;
     public final Point position;
 
-    private String innerText;
-
-    public Button(Point position, int width, int height, String innerText) {
-        this(position, width, height);
-        this.innerText = innerText;
-    }
-
     public Button(Point position, int width, int height) {
         this.position = position;
         this.width = width;
@@ -40,10 +33,6 @@ public abstract class Button {
 
     public boolean isAvailableToClick() {
         return false;
-    }
-
-    public String getInnerText() {
-        return innerText;
     }
 
     public void setImage(String path) throws IOException {

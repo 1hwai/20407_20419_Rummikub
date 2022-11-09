@@ -37,15 +37,8 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     private NextTurnButton nextTurnBtn;
     private ResetButton resetBtn;
 
-    /**
-     * A variable to save where the mouse is pointing.
-     *
-     * @serial
-     * @see RummikubKeyAdapter
-     */
-    private static final Pointer pointer = new Pointer();
-
     private final Table table = new Table();
+    private final Pointer pointer = new Pointer(table);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -115,15 +108,12 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 int y = 3 * UNIT * (i + 1);
                 g.drawImage(getTileImg(tile), x, y, Tile.width, Tile.height, null);
                 j++;
-                if (pointer.isOn(i, j)) {
-                    g.drawLine(x, y + Tile.height + 5, x + Tile.width + 5, y + Tile.height + 5);
-                }
             }
-            pointer.printPosition();
-            if (tileList.getList().isEmpty()) {
-                pointer.printPosition();
-                g.drawLine(UNIT, y + Tile.height + 5, x + Tile.width + 5, y + Tile.height + 5);
-            }
+//            pointer.printPosition();
+//            if (tileList.getList().isEmpty()) {
+//                pointer.printPosition();
+//                g.drawLine(UNIT, y + Tile.height + 5, x + Tile.width + 5, y + Tile.height + 5);
+//            }
             rowWidth += listWidth + 20;
 
         }
@@ -214,23 +204,23 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     private void MouseListener() {
         addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 Point mp = new Point(e.getX(), e.getY());
 
                 nextTurnBtn.ifButtonClicked(mp, () -> {
-                    System.out.println("Next!");
                     table.next();
+                    pointer.init();
                     return null;
                 });
                 resetBtn.ifButtonClicked(mp, () -> {
-                    System.out.println("Reset!");
                     return null;
                 });
             }
         });
     }
 
-    private static final class RummikubKeyAdapter extends KeyAdapter{
+    private final class RummikubKeyAdapter extends KeyAdapter {
 
         public RummikubKeyAdapter() {
         }
@@ -242,6 +232,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 case KeyEvent.VK_A -> pointer.move(Movement.LEFT);
                 case KeyEvent.VK_E -> pointer.move(Movement.QUICK_RIGHT);
                 case KeyEvent.VK_D -> pointer.move(Movement.RIGHT);
+                case KeyEvent.VK_SPACE -> pointer.swapSide();
             }
         }
     }

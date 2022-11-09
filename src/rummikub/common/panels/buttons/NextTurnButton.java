@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 public class NextTurnButton extends Button {
 
     public NextTurnButton(Point position) {
-        super(position, 120, 120, "Next");
+        super(position, 120, 120);
     }
 
 }

@@ -5,7 +5,7 @@ import java.awt.*;
 public class ResetButton extends Button {
 
     public ResetButton(Point position) {
-        super(position, 120, 120, "Reset");
+        super(position, 120, 120);
     }
 
 }

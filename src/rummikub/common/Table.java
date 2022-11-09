@@ -5,6 +5,7 @@ import rummikub.common.player.Player;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
 import rummikub.common.utils.EmptySackException;
+import rummikub.common.utils.Pointer;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,12 @@ public class Table {
         players.forEach(p -> p.init(sack));
 
         currentPlayer = players.get(0);
+
+        try {
+            insertTile(sack.extractTile(), 0);
+        } catch (EmptySackException e) {
+            e.printException();
+        }
 
         test();
     }
