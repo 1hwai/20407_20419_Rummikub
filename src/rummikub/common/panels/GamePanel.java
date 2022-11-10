@@ -29,6 +29,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     public static final int UNIT = 30;
     public static final Font COURIER_NEW = new Font("Courier new", Font.PLAIN, 28);
+    private static final Color ON_HAND_COLOR = new Color(82, 155, 218, 122);
 
     private final Boolean running;
 
@@ -107,15 +108,17 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 int x = rowWidth + UNIT + 2 * UNIT * j;
                 int y = 3 * UNIT * (i + 1);
                 g.drawImage(getTileImg(tile), x, y, Tile.width, Tile.height, null);
+                if (table.getCurrentPlayer().getOnHand().getList().contains(tile)) {
+                    g.setColor(ON_HAND_COLOR);
+                    g.fillRect(x, y, Tile.width, Tile.height);
+                }
+                if (pointer.isTile(tile)) {
+                    g.setColor(Color.white);
+                    g.drawLine(x, y + Tile.height + 5, x + Tile.width, y + Tile.height + 5);
+                }
                 j++;
             }
-//            pointer.printPosition();
-//            if (tileList.getList().isEmpty()) {
-//                pointer.printPosition();
-//                g.drawLine(UNIT, y + Tile.height + 5, x + Tile.width + 5, y + Tile.height + 5);
-//            }
             rowWidth += listWidth + 20;
-
         }
 
         drawPlayerDeck(g, table.getCurrentPlayer());
@@ -134,8 +137,21 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
             TileList deck = human.getDeck();
             int i = 0;
             for (Tile tile : deck.getList()) {
-                g.drawImage(getTileImg(tile), x + 2 * UNIT * (i % 18), y + HEIGHT * (i / 18) / 3, Tile.width, Tile.height, null);
+                int x1 = x + 2 * UNIT * (i % 18);
+                int y1 = y + HEIGHT * (i / 18) / 3;
+                g.drawImage(getTileImg(tile), x1, y1, Tile.width, Tile.height, null);
+                if (table.getCurrentPlayer().getOnHand().getList().contains(tile)) {
+                    g.setColor(ON_HAND_COLOR);
+                    g.fillRect(x1, y1, Tile.width, Tile.height);
+                }
+                if (pointer.isTile(tile)) {
+                    g.setColor(Color.BLACK);
+                    g.drawLine(x1, y1 + Tile.height + 5, x1 + Tile.width + 5, y1 + Tile.height + 5);
+                }
                 i++;
+            }
+            if (deck.getList().isEmpty()) {
+                g.drawLine(x, y + Tile.height + 5,  x + Tile.width + 5, y + Tile.height + 5);
             }
         }
     }
@@ -229,9 +245,17 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_Q -> pointer.move(Movement.QUICK_LEFT);
-                case KeyEvent.VK_A -> pointer.move(Movement.LEFT);
+                case KeyEvent.VK_A, KeyEvent.VK_LEFT -> pointer.move(Movement.LEFT);
                 case KeyEvent.VK_E -> pointer.move(Movement.QUICK_RIGHT);
-                case KeyEvent.VK_D -> pointer.move(Movement.RIGHT);
+                case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> pointer.move(Movement.RIGHT);
+
+                case KeyEvent.VK_SHIFT -> {
+                    table.getCurrentPlayer().setOnHand(pointer.getTile());
+                    System.out.println();
+                    table.getCurrentPlayer().getOnHand().getList().forEach(t -> System.out.println(t.color + " " + t.number));
+                    System.out.println();
+                }
+
                 case KeyEvent.VK_SPACE -> pointer.swapSide();
             }
         }

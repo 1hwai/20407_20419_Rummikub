@@ -14,9 +14,10 @@ public class TileSack {
     public TileSack() {
         for (TileColor color : TileColor.values()) {
             for (int i = 1; i < 14; i++) {
-                    Tile tile = new Tile(i, color);
-                    sack.insertTile(tile);
-                    sack.insertTile(tile);
+                Tile tile0 = new Tile(i, color);
+                Tile tile1 = new Tile(i, color);
+                sack.insertTile(tile0);
+                sack.insertTile(tile1);
             }
         }
         Tile blackJoker = new Tile(0, TileColor.WHITE);

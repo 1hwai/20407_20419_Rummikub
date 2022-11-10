@@ -27,9 +27,14 @@ public class Pointer {
 
     public void swapSide() {
         isDeckSide = !isDeckSide;
+        init();
+        if (!isDeckSide){
+            tile = tileList.getList().get(0);
+        }
     }
 
     public void move(Movement movement) {
+        if (!isAbleToMove()) return;
         if (isDeckSide) {
             ArrayList<Tile> list = table.getCurrentPlayer().getDeck().getList();
             int idx = list.indexOf(tile);
@@ -40,13 +45,43 @@ public class Pointer {
             }
         } else {
             // table에서 pointer 움직임, 위 if 문 참고할 것
+            ArrayList<TileList> tableList = table.getTableList();
+            int listIdx = tableList.indexOf(tileList);
+            ArrayList<Tile> list = tileList.getList();
+            int idx = tileList.getList().indexOf(tile);
             switch (movement) {
-                case LEFT -> ;
-                case RIGHT -> ;
-                case QUICK_LEFT -> ;
-                case QUICK_RIGHT -> ;
+                case LEFT -> tile = list.get(idx > 0 ? idx - 1 : list.size() - 1);
+                case RIGHT -> tile = list.get((idx + 1) % list.size());
+                case QUICK_LEFT -> {
+                    tileList = tableList.get(listIdx > 0 ? listIdx - 1 : tableList.size() - 1);
+                    tile = tileList.getList().get(0);
+                }
+                case QUICK_RIGHT -> {
+                    tileList = tableList.get((listIdx + 1) % tableList.size());
+                    tile = tileList.getList().get(0);
+                }
             }
         }
+    }
+
+    private boolean isAbleToMove() {
+        if (isDeckSide) {
+            return !table.getCurrentPlayer().getDeck().getList().isEmpty();
+        } else {
+            return !table.getTableList().isEmpty();
+        }
+    }
+
+    public Tile getTile() {
+        return tile;
+    }
+
+    public boolean isTile(Tile tile) {
+        return this.tile == tile;
+    }
+
+    public void printTile() {
+        System.out.println(tile.color + " " + tile.number);
     }
 
 }
