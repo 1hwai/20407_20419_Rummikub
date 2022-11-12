@@ -1,5 +1,7 @@
 package rummikub.common.tile;
 
+import rummikub.common.Table;
+
 import java.util.ArrayList;
 
 public class TileList {
@@ -19,14 +21,28 @@ public class TileList {
     }
 
     public void insertTile(Tile tile) {
+        if (tile.hasBelong()) {
+            System.out.println(tile.type + " " + tile.number);
+            System.out.println("I'm belonged to " + tile.getBelong());
+            tile.getBelong().getList().remove(tile);
+        }
+
         tile.setBelong(this);
         list.add(tile);
     }
 
     public void insertTileList(TileList tilelist) {
-        for (Tile tile : tilelist.list) {
+        tilelist.getList().remove(Table.EMPTY);
+        for (Tile tile : tilelist.getList()) {
             insertTile(tile);
         }
+    }
+
+    public Tile extractTile(Tile tile) {
+        if (!contains(tile)) return null;
+        tile.removeBelong();
+        list.remove(tile);
+        return tile;
     }
 
     public Tile extractTile(int idx) {
@@ -34,6 +50,10 @@ public class TileList {
         tile.removeBelong();
         list.remove(idx);
         return tile;
+    }
+
+    public boolean contains(Tile tile) {
+        return list.contains(tile);
     }
 
 }

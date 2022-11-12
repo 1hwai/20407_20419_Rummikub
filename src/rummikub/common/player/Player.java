@@ -8,7 +8,7 @@ import rummikub.common.utils.EmptySackException;
 public abstract class Player {
 
     private final TileList deck = new TileList();
-    private TileList onHand = new TileList();
+    private final TileList onHand = new TileList();
 
     private final String id;
 
@@ -42,12 +42,10 @@ public abstract class Player {
         deck.insertTile(tile);
     }
 
+    //toggle
     public void setOnHand(Tile tile) {
-        // TODO: 손에 있으면 지우고 없으면 추가
-        if (onHand.getList().contains(tile))
-            onHand.extractTile(onHand.getList().indexOf(tile));
-        else
-            onHand.insertTile(tile);
+        if (onHand.contains(tile)) onHand.extractTile(tile);
+        else onHand.getList().add(tile);
     }
 
 }

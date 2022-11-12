@@ -8,7 +8,7 @@ import rummikub.common.player.Player;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
 import rummikub.common.utils.Movement;
-import rummikub.common.utils.Pointer;
+import rummikub.common.player.Pointer;
 import rummikub.common.utils.TileType;
 
 import javax.imageio.ImageIO;
@@ -137,7 +137,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 }
                 if (pointer.isTile(tile)) {
                     g.setColor(Color.BLACK);
-                    g.drawLine(x1, y1 + Tile.height + 5, x1 + Tile.width + 5, y1 + Tile.height + 5);
+                    g.drawLine(x1, y1 + Tile.height + 5, x1 + Tile.width, y1 + Tile.height + 5);
                 }
                 i++;
             }
@@ -246,8 +246,11 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 case KeyEvent.VK_E -> pointer.move(Movement.QUICK_RIGHT);
                 case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> pointer.move(Movement.RIGHT);
 
-                case KeyEvent.VK_SHIFT -> table.getCurrentPlayer().setOnHand(pointer.getTile());
+                case KeyEvent.VK_BACK_SPACE -> pointer.cancel();
+
+                case KeyEvent.VK_SHIFT -> pointer.select();
                 case KeyEvent.VK_SPACE -> pointer.swapSide();
+                case KeyEvent.VK_ENTER -> pointer.insert();
             }
         }
     }

@@ -1,12 +1,13 @@
-package rummikub.common.utils;
+package rummikub.common.player;
 
 import rummikub.common.Table;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
+import rummikub.common.utils.Movement;
 
 import java.util.ArrayList;
 
-public class Pointer {
+public class Pointer implements PlayerHandler {
 
     public boolean isDeckSide = true;
 
@@ -21,7 +22,7 @@ public class Pointer {
     }
 
     public void init() {
-        tileList = table.getTableList().get(0);
+        tileList = isDeckSide ? table.getCurrentPlayer().getDeck() : table.getTableList().get(0);
         tile = table.getCurrentPlayer().getDeck().getList().get(0);
     }
 
@@ -80,8 +81,24 @@ public class Pointer {
         return this.tile == tile;
     }
 
-    public void printTile() {
-        System.out.println(tile.type + " " + tile.number);
+    @Override
+    public void insert() {
+        if (isDeckSide) return;
+        TileList onHand = table.getCurrentPlayer().getOnHand();
+        table.insertTileList(onHand, table.getTableList().indexOf(tileList));
+        onHand.getList().clear();
     }
 
+    @Override
+    public void select() {
+        if (getTile() == Table.EMPTY) return;
+        table.getCurrentPlayer().setOnHand(getTile());
+    }
+
+    @Override
+    public void cancel() {
+        TileList onHand = table.getCurrentPlayer().getOnHand();
+        if (!onHand.getList().isEmpty())
+            onHand.extractTile(onHand.getList().size() - 1);
+    }
 }

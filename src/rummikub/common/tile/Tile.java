@@ -22,6 +22,10 @@ public class Tile {
         belong = null;
     }
 
+    public boolean hasBelong() {
+        return belong != null;
+    }
+
     public TileList getBelong() {
         return belong;
     }

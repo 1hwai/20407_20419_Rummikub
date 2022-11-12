@@ -5,6 +5,7 @@ import rummikub.common.player.Player;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
 import rummikub.common.utils.EmptySackException;
+import rummikub.common.utils.TileType;
 
 import java.util.ArrayList;
 
@@ -16,13 +17,16 @@ public class Table {
 
     private final TileSack sack = new TileSack();
 
+    public static final Tile EMPTY = new Tile(1, TileType.EMPTY);
+
     public Table() {
         init();
-        test();
+//        test();
     }
 
     private void init() {
         TileList emptyTileList = new TileList();
+        emptyTileList.insertTile(EMPTY);
         tableList.add(emptyTileList);
         //Prototype Player inserting code
         players.add(new Human("hawon"));
@@ -85,6 +89,7 @@ public class Table {
 
     public void insertTile(Tile playerTile, int idx) {
         TileList tileList = tableList.get(idx);
+        tileList.getList().remove(EMPTY);
         try {
             tileList.insertTile(playerTile);
         } catch (Exception e) {
@@ -94,31 +99,19 @@ public class Table {
     }
 
     public void insertTileList(TileList playerTileList, int idx) {
+        if (playerTileList.getList().isEmpty()) return;
         TileList tileList = tableList.get(idx);
+        tileList.getList().remove(EMPTY);
         tileList.insertTileList(playerTileList);
+
         createEmptyTileList();
-    }
-
-    public void replaceTile(Tile onHand, TileList to) {
-
-    }
-
-    private void removeTile(Tile onHand, int listIdx) {
-
-    }
-
-    private void removeTileList(TileList tileList) {
-        if (tableList.indexOf(tileList) == tableList.size() - 1) {
-
-        }
-        tableList.remove(tileList);
     }
 
     private void createEmptyTileList() {
         TileList tailTileList = tableList.get(tableList.size() - 1);
         if (tailTileList.getList().isEmpty()) return;
         TileList emptyTileList = new TileList();
-//        emptyTileList.insertTile(new Tile(-1, TileColor.WHITE));
+        emptyTileList.insertTile(EMPTY);
         tableList.add(emptyTileList);
     }
 
