@@ -19,15 +19,19 @@ public class TileList {
     }
 
     public void insertTile(Tile tile) {
+        tile.setBelong(this);
         list.add(tile);
     }
 
     public void insertTileList(TileList tilelist) {
-        this.list.addAll(tilelist.list);
+        for (Tile tile : tilelist.list) {
+            insertTile(tile);
+        }
     }
 
     public Tile extractTile(int idx) {
         Tile tile = list.get(idx);
+        tile.removeBelong();
         list.remove(idx);
         return tile;
     }

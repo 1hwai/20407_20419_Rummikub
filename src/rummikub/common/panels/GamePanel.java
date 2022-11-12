@@ -9,7 +9,7 @@ import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
 import rummikub.common.utils.Movement;
 import rummikub.common.utils.Pointer;
-import rummikub.common.utils.TileColor;
+import rummikub.common.utils.TileType;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -64,7 +64,6 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     private void draw(Graphics g) {
         drawIndicators(g);
         drawTable(g);
-        drawPointer(g);
     }
 
     @Override
@@ -74,14 +73,6 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         g.drawString("Current Player : " + table.getCurrentPlayer().getId(), UNIT, UNIT);
 
         drawButtons(g);
-    }
-
-    public void drawPointer(Graphics g) {
-//        int x1 = pointer.getI() * Tile.width;
-//        int y1 = pointer.getJ() * Tile.height + Tile.height + 5;
-//        g.setColor(Color.decode("#02cff7"));
-//
-//        g.drawLine(x1 - 5, y1, x1 + Tile.width + 5, y1);
     }
 
     @Override
@@ -163,18 +154,28 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     private void loadImages() {
         try {
+            final int TILE_IMAGE_SIZE = 55;
             final String SOURCE = "/resources/tiles/";
-            for (TileColor color : TileColor.values()) {
-                String colorCode = color.getColorCode();
+            for (TileType color : TileType.values()) {
+                if (color == TileType.EMPTY) break;
+                String colorCode = color.getTypeCode();
                 for (int i = 1; i < 14; i++) {
                     tileImages.add(ImageIO.read(getClass().getResource(SOURCE + colorCode + i + ".png")));
                     System.out.println(SOURCE + colorCode + i + ".png" + " has been Successfully loaded");
                 }
             }
-            tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "RED_JOKER" + ".png")));
-            tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "WHITE_JOKER" + ".png")));
-            System.out.println(SOURCE + "RED_JOKER" + ".png" + " has been Successfully loaded");
-            System.out.println(SOURCE + "WHITE_JOKER" + ".png" + " has been Successfully loaded");
+            tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "RED_JOKER.png")));
+            tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "WHITE_JOKER.png")));
+            System.out.println(SOURCE + "RED_JOKER.png" + " has been Successfully loaded");
+            System.out.println(SOURCE + "WHITE_JOKER.png" + " has been Successfully loaded");
+            tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "EMPTY.png")));
+            System.out.println(SOURCE + "EMPTY.png" + " has been Successfully loaded");
+
+            System.out.println("**********************");
+            if (tileImages.size() < TILE_IMAGE_SIZE) System.out.println("Error : TileImage not loaded");
+            else if (tileImages.size() > TILE_IMAGE_SIZE) System.out.println("Warning : TileImages have been Overloaded");
+            else System.out.println("All Tiles have been Successfully loaded");
+            System.out.println("**********************");
 
             plasticDeck = ImageIO.read(getClass().getResource("/resources/utils/plasticDeck.png"));
             System.out.println("/resources/utils/plasticDeck.png has been Successfully loaded");
@@ -191,20 +192,16 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     }
 
-    /**
-     * @author 1hwai
-     * @param tile  The tile that is wanted to get the image of it.
-     * @return {@code BufferedImage} image of the tile.
-     */
     private BufferedImage getTileImg(Tile tile) {
+        if (tile.type == TileType.EMPTY) return tileImages.get(tileImages.size() - 1);
         if (tile.number == 0) {
-            if (tile.color == TileColor.WHITE) return tileImages.get(tileImages.size() - 1);
-            else return tileImages.get(tileImages.size() - 2);
+            if (tile.type == TileType.WHITE) return tileImages.get(tileImages.size() - 2);
+            else return tileImages.get(tileImages.size() - 3);
         }
 
         int i = 0;
-        for (TileColor c : TileColor.values()) {
-            if (c == tile.color) break;
+        for (TileType c : TileType.values()) {
+            if (c == tile.type) break;
             i++;
         }
 
@@ -249,13 +246,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 case KeyEvent.VK_E -> pointer.move(Movement.QUICK_RIGHT);
                 case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> pointer.move(Movement.RIGHT);
 
-                case KeyEvent.VK_SHIFT -> {
-                    table.getCurrentPlayer().setOnHand(pointer.getTile());
-                    System.out.println();
-                    table.getCurrentPlayer().getOnHand().getList().forEach(t -> System.out.println(t.color + " " + t.number));
-                    System.out.println();
-                }
-
+                case KeyEvent.VK_SHIFT -> table.getCurrentPlayer().setOnHand(pointer.getTile());
                 case KeyEvent.VK_SPACE -> pointer.swapSide();
             }
         }

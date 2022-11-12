@@ -1,20 +1,33 @@
 package rummikub.common.tile;
 
-import rummikub.common.utils.TileColor;
+import rummikub.common.utils.TileType;
 
 public class Tile {
     public int number;
-    public TileColor color;
+    public TileType type;
+    private TileList belong;
 
     public static final int width = 60, height = 80;
 
-    public Tile(int number, TileColor color) {
+    public Tile(int number, TileType type) {
         this.number = number;
-        this.color = color;
+        this.type = type;
+    }
+
+    public void setBelong(TileList belong) {
+        this.belong = belong;
+    }
+
+    public void removeBelong() {
+        belong = null;
+    }
+
+    public TileList getBelong() {
+        return belong;
     }
 
     private boolean isValidNumber(int number) {
-        return number < 14;
+        return -1 <= number && number <= 13;
     }
 
 }

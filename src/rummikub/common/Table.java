@@ -5,7 +5,6 @@ import rummikub.common.player.Player;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
 import rummikub.common.utils.EmptySackException;
-import rummikub.common.utils.Pointer;
 
 import java.util.ArrayList;
 
@@ -18,17 +17,19 @@ public class Table {
     private final TileSack sack = new TileSack();
 
     public Table() {
+        init();
+        test();
+    }
+
+    private void init() {
         TileList emptyTileList = new TileList();
         tableList.add(emptyTileList);
-
         //Prototype Player inserting code
         players.add(new Human("hawon"));
         players.add(new Human("donghyup"));
         players.forEach(p -> p.init(sack));
 
         currentPlayer = players.get(0);
-
-        test();
     }
 
     private void test() {
@@ -98,10 +99,26 @@ public class Table {
         createEmptyTileList();
     }
 
+    public void replaceTile(Tile onHand, TileList to) {
+
+    }
+
+    private void removeTile(Tile onHand, int listIdx) {
+
+    }
+
+    private void removeTileList(TileList tileList) {
+        if (tableList.indexOf(tileList) == tableList.size() - 1) {
+
+        }
+        tableList.remove(tileList);
+    }
+
     private void createEmptyTileList() {
         TileList tailTileList = tableList.get(tableList.size() - 1);
         if (tailTileList.getList().isEmpty()) return;
         TileList emptyTileList = new TileList();
+//        emptyTileList.insertTile(new Tile(-1, TileColor.WHITE));
         tableList.add(emptyTileList);
     }
 

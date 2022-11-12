@@ -81,7 +81,7 @@ public class Pointer {
     }
 
     public void printTile() {
-        System.out.println(tile.color + " " + tile.number);
+        System.out.println(tile.type + " " + tile.number);
     }
 
 }
