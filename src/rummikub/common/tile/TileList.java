@@ -22,8 +22,6 @@ public class TileList {
 
     public void insertTile(Tile tile) {
         if (tile.hasBelong()) {
-            System.out.println(tile.type + " " + tile.number);
-            System.out.println("I'm belonged to " + tile.getBelong());
             tile.getBelong().getList().remove(tile);
         }
 

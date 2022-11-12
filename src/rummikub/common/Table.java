@@ -70,8 +70,12 @@ public class Table {
         hasChanged = false;
     }
 
-    private void validate() {
+    public void setChanged() {
+        hasChanged = !hasChanged;
+    }
 
+    public void validate() {
+        tableList.removeIf(tileList -> tileList.getList().isEmpty());
     }
 
     private void updateCurrentPlayer() {

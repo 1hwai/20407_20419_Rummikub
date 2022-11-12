@@ -87,9 +87,11 @@ public class Pointer implements PlayerHandler {
     @Override
     public void insert() {
         if (isDeckSide) return;
+        table.setChanged();
         TileList onHand = table.getCurrentPlayer().getOnHand();
         table.insertTileList(onHand, table.getTableList().indexOf(tileList));
         onHand.getList().clear();
+        table.validate();
     }
 
     @Override
