@@ -13,7 +13,10 @@ public class Pointer implements PlayerHandler {
 
     private final Table table;
 
+    //Use tableListIdx instead of tileList
+    //발적화 너무 많이 됨
     private TileList tileList;
+    private int tableListIdx = 0;
     private Tile tile;
 
     public Pointer(Table table) {
