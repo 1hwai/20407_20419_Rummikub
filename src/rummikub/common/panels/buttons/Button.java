@@ -1,22 +1,14 @@
 package rummikub.common.panels.buttons;
 
-import javax.imageio.ImageIO;
+import rummikub.common.utils.Drawable;
+
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 import java.util.function.Supplier;
 
-public abstract class Button {
-    private BufferedImage image = null;
-
-    public final int width, height;
-    public final Point position;
+public abstract class Button extends Drawable {
 
     public Button(Point position, int width, int height) {
-        this.position = position;
-        this.width = width;
-        this.height = height;
+        super(position, width, height);
     }
 
     public boolean isButtonClicked(Point mp) {
@@ -31,16 +23,9 @@ public abstract class Button {
         }
     }
 
+    @Deprecated
     public boolean isAvailableToClick() {
         return false;
-    }
-
-    public void setImage(String path) throws IOException {
-        image = ImageIO.read(Objects.requireNonNull(getClass().getResource(path)));
-    }
-
-    public BufferedImage getImage() {
-        return image;
     }
 
 }

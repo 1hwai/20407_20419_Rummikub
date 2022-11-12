@@ -103,7 +103,8 @@ public class Pointer implements PlayerHandler {
     @Override
     public void cancel() {
         TileList onHand = table.getCurrentPlayer().getOnHand();
-        if (!onHand.getList().isEmpty())
-            onHand.extractTile(onHand.getList().size() - 1);
+        if (!onHand.getList().isEmpty()) onHand.extractTile(onHand.getList().size() - 1);
+
     }
+
 }

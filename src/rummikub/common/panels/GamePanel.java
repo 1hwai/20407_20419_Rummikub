@@ -9,6 +9,7 @@ import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
 import rummikub.common.utils.Movement;
 import rummikub.common.player.Pointer;
+import rummikub.common.utils.PlasticDeck;
 import rummikub.common.utils.TileType;
 
 import javax.imageio.ImageIO;
@@ -34,7 +35,8 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     private final Boolean running;
 
     private final ArrayList<BufferedImage> tileImages = new ArrayList<>();
-    private BufferedImage plasticDeck = null;
+    private BufferedImage pointerImg = null;
+    private PlasticDeck plasticDeck = new PlasticDeck();
     private NextTurnButton nextTurnBtn;
     private ResetButton resetBtn;
 
@@ -77,10 +79,8 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     @Override
     public void drawButtons(Graphics g) {
-        g.drawImage(nextTurnBtn.getImage(), nextTurnBtn.position.x, nextTurnBtn.position.y,
-                nextTurnBtn.width, nextTurnBtn.height, null);
-        g.drawImage(resetBtn.getImage(), resetBtn.position.x, resetBtn.position.y,
-                resetBtn.width, resetBtn.height, null);
+        nextTurnBtn.draw(g);
+        resetBtn.draw(g);
     }
 
     @Override
@@ -104,8 +104,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                     g.fillRect(x, y, Tile.width, Tile.height);
                 }
                 if (pointer.isTile(tile)) {
-                    g.setColor(Color.white);
-                    g.drawLine(x, y + Tile.height + 5, x + Tile.width, y + Tile.height + 5);
+                    g.drawImage(pointerImg, x, y, Tile.width, Tile.height, null);
                 }
                 j++;
             }
@@ -118,18 +117,17 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     @Override
     public void drawPlayerDeck(Graphics g, Player player) {
         final int WIDTH = GamePanel.SCREEN_WIDTH * 3 / 5; // 1080
-        final int HEIGHT = WIDTH / 4;   // 270
-        int x = (GamePanel.SCREEN_WIDTH - WIDTH) / 2;
-        int y = GamePanel.SCREEN_HEIGHT - HEIGHT;
+        int x = plasticDeck.position.x;
+        int y = plasticDeck.position.y + 30;
 
-        g.drawImage(plasticDeck, x, y, WIDTH, HEIGHT, null);
+        plasticDeck.draw(g);
 
         if (player instanceof Human human) {
             TileList deck = human.getDeck();
             int i = 0;
             for (Tile tile : deck.getList()) {
                 int x1 = x + 2 * UNIT * (i % 18);
-                int y1 = y + HEIGHT * (i / 18) / 3;
+                int y1 = y + WIDTH/4 * (i / 18) / 3;
                 g.drawImage(getTileImg(tile), x1, y1, Tile.width, Tile.height, null);
                 if (table.getCurrentPlayer().getOnHand().getList().contains(tile)) {
                     g.setColor(ON_HAND_COLOR);
@@ -137,12 +135,12 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 }
                 if (pointer.isTile(tile)) {
                     g.setColor(Color.BLACK);
-                    g.drawLine(x1, y1 + Tile.height + 5, x1 + Tile.width, y1 + Tile.height + 5);
+                    g.drawImage(pointerImg, x1, y1, Tile.width, Tile.height, null);
                 }
                 i++;
             }
             if (deck.getList().isEmpty()) {
-                g.drawLine(x, y + Tile.height + 5,  x + Tile.width + 5, y + Tile.height + 5);
+                g.drawImage(pointerImg, x, y, Tile.width, Tile.height, null);
             }
         }
     }
@@ -156,12 +154,12 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         try {
             final int TILE_IMAGE_SIZE = 55;
             final String SOURCE = "/resources/tiles/";
-            for (TileType color : TileType.values()) {
-                if (color == TileType.EMPTY) break;
-                String colorCode = color.getTypeCode();
+            for (TileType type : TileType.values()) {
+                if (type == TileType.EMPTY) break;
+                String typeCode = type.getTypeCode();
                 for (int i = 1; i < 14; i++) {
-                    tileImages.add(ImageIO.read(getClass().getResource(SOURCE + colorCode + i + ".png")));
-                    System.out.println(SOURCE + colorCode + i + ".png" + " has been Successfully loaded");
+                    tileImages.add(ImageIO.read(getClass().getResource(SOURCE + typeCode + i + ".png")));
+                    System.out.println(SOURCE + typeCode + i + ".png" + " has been Successfully loaded");
                 }
             }
             tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "RED_JOKER.png")));
@@ -177,13 +175,15 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
             else System.out.println("All Tiles have been Successfully loaded");
             System.out.println("**********************");
 
-            plasticDeck = ImageIO.read(getClass().getResource("/resources/utils/plasticDeck.png"));
-            System.out.println("/resources/utils/plasticDeck.png has been Successfully loaded");
+            plasticDeck.setImage("/resources/utils/PLASTIC_DECK.png");
+            System.out.println("/resources/utils/PLASTIC_DECK.png has been Successfully loaded");
+            pointerImg = ImageIO.read(getClass().getResource("/resources/utils/POINTER.png"));
+            System.out.println("/resources/utils/POINTER.png has been Successfully loaded");
 
-            nextTurnBtn.setImage("/resources/indicators/nextTurnBtn.png");
-            System.out.println("/resources/indicators/nextTurnBtn.png has been Successfully loaded");
-            resetBtn.setImage("/resources/indicators/resetBtn.png");
-            System.out.println("/resources/indicators/resetBtn.png has been Successfully loaded");
+            nextTurnBtn.setImage("/resources/indicators/NEXT_TURN_BTN.png");
+            System.out.println("/resources/indicators/NEXT_TURN_BTN.png has been Successfully loaded");
+            resetBtn.setImage("/resources/indicators/RESET_BTN.png");
+            System.out.println("/resources/indicators/RESET_BTN.png has been Successfully loaded");
 
         } catch (IOException e) {
             System.out.println("IOException :");

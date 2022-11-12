@@ -3,17 +3,14 @@ package rummikub.common.tile;
 import rummikub.common.Table;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TileList {
-    public TileListType listType;
+
     private final ArrayList<Tile> list = new ArrayList<>();
 
     public TileList() {
 
-    }
-
-    public TileList(TileListType listType) {
-        this.listType = listType;
     }
 
     public ArrayList<Tile> getList() {
@@ -36,18 +33,30 @@ public class TileList {
         }
     }
 
-    public Tile extractTile(Tile tile) {
-        if (!contains(tile)) return null;
-        tile.removeBelong();
+    public void removeTile(Tile tile) {
+        if (!contains(tile)) return;
         list.remove(tile);
-        return tile;
     }
 
     public Tile extractTile(int idx) {
         Tile tile = list.get(idx);
-        tile.removeBelong();
         list.remove(idx);
         return tile;
+    }
+
+    public boolean validate() {
+        AtomicBoolean isTileListValid = new AtomicBoolean(false);
+        isTileListValid.set(validateAsASC() || validateAsSIB());
+
+        return isTileListValid.get();
+    }
+
+    private boolean validateAsASC() {
+        return true;
+    }
+
+    private boolean validateAsSIB() {
+        return true;
     }
 
     public boolean contains(Tile tile) {

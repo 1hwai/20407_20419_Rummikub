@@ -8,6 +8,7 @@ import rummikub.common.utils.EmptySackException;
 import rummikub.common.utils.TileType;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Table {
     private final ArrayList<TileList> tableList = new ArrayList<>();
@@ -59,9 +60,12 @@ public class Table {
     }
 
     public void next() {
-        validate();
+        final boolean isValid = validate();
+        if (currentPlayer.getDeck().getList().isEmpty()) {
+            players.remove(currentPlayer);
+        }
         try {
-            if (!hasChanged) currentPlayer.insertTileToDeck(sack.extractTile());
+            if (!hasChanged && players.contains(currentPlayer)) currentPlayer.insertTileToDeck(sack.extractTile());
         } catch (EmptySackException e) {
             hasChanged = true;
         }
@@ -74,8 +78,14 @@ public class Table {
         hasChanged = !hasChanged;
     }
 
-    public void validate() {
+    public boolean validate() {
         tableList.removeIf(tileList -> tileList.getList().isEmpty());
+
+        AtomicBoolean isTableListValid = new AtomicBoolean(false);
+        for (TileList tileList : tableList) {
+            isTableListValid.set(tileList.validate());
+        }
+        return isTableListValid.get();
     }
 
     private void updateCurrentPlayer() {

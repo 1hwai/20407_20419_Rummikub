@@ -44,7 +44,7 @@ public abstract class Player {
 
     //toggle
     public void setOnHand(Tile tile) {
-        if (onHand.contains(tile)) onHand.extractTile(tile);
+        if (onHand.contains(tile)) onHand.removeTile(tile);
         else onHand.getList().add(tile);
     }
 
