@@ -3,7 +3,9 @@ package rummikub.common.tile;
 import rummikub.common.utils.TileType;
 
 public class Tile {
+
     public int number;
+    //Joker.number should be 0.
     public TileType type;
     private TileList belong;
 
@@ -28,6 +30,14 @@ public class Tile {
 
     public TileList getBelong() {
         return belong;
+    }
+
+    public boolean isType(TileType type) {
+        return this.type == type;
+    }
+
+    public boolean isJoker() {
+        return number == 0;
     }
 
     private boolean isValidNumber(int number) {

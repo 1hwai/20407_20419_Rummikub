@@ -4,19 +4,17 @@ import rummikub.common.Table;
 import rummikub.common.tile.Tile;
 import rummikub.common.tile.TileList;
 import rummikub.common.utils.Movement;
+import rummikub.common.utils.TileType;
 
 import java.util.ArrayList;
 
-public class Pointer implements PlayerHandler {
+public class Pointer implements PointerAdapter {
 
     public boolean isDeckSide = true;
 
     private final Table table;
 
-    //Use tableListIdx instead of tileList
-    //발적화 너무 많이 됨
     private TileList tileList;
-    private int tableListIdx = 0;
     private Tile tile;
 
     public Pointer(Table table) {
@@ -87,11 +85,24 @@ public class Pointer implements PlayerHandler {
     @Override
     public void insert() {
         if (isDeckSide) return;
-        table.setChanged();
-        TileList onHand = table.getCurrentPlayer().getOnHand();
-        table.insertTileList(onHand, table.getTableList().indexOf(tileList));
-        onHand.getList().clear();
-        table.validate();
+
+        if (isValidToInsert()) {
+            table.setChanged();
+            TileList onHand = table.getCurrentPlayer().getOnHand();
+            table.insertTileList(onHand, tileList);
+            onHand.getList().clear();
+        }
+    }
+
+    @Override
+    public boolean isValidToInsert() {
+        TileList clone = tileList.clone();
+        TileList onHandClone = table.getCurrentPlayer().getOnHand().clone();
+
+        clone.insertTileList(onHandClone);
+        clone.getList().removeIf(t -> t.isType(TileType.EMPTY));
+
+        return clone.validate();
     }
 
     @Override

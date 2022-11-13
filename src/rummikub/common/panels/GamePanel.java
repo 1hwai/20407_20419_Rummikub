@@ -36,7 +36,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     private final ArrayList<BufferedImage> tileImages = new ArrayList<>();
     private BufferedImage pointerImg = null;
-    private PlasticDeck plasticDeck = new PlasticDeck();
+    private final PlasticDeck plasticDeck = new PlasticDeck();
     private NextTurnButton nextTurnBtn;
     private ResetButton resetBtn;
 
@@ -200,8 +200,8 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         }
 
         int i = 0;
-        for (TileType c : TileType.values()) {
-            if (c == tile.type) break;
+        for (TileType type : TileType.values()) {
+            if (type == tile.type) break;
             i++;
         }
 
@@ -224,6 +224,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 nextTurnBtn.ifButtonClicked(mp, () -> {
                     table.next();
                     pointer.init();
+                    pointer.isDeckSide = true;
                     return null;
                 });
                 resetBtn.ifButtonClicked(mp, () -> {

@@ -22,7 +22,7 @@ public class Table {
 
     public Table() {
         init();
-//        test();
+        test();
     }
 
     private void init() {
@@ -38,25 +38,7 @@ public class Table {
     }
 
     private void test() {
-        try {
 
-            //test case 1
-            for (int i = 0; i < 4; i++) {
-                TileList list = new TileList();
-                for (int j = 0; j < 4; j++) {
-                    list.insertTile(sack.extractTile());
-                }
-                insertTileList(list, i);
-            }
-
-            //test case 2
-//            for (int i = 0; i < 106; i++) {
-//                insertTile(sack.extractTile(), i);
-//            }
-
-        } catch (EmptySackException e) {
-            e.printException();
-        }
     }
 
     public void next() {
@@ -83,6 +65,7 @@ public class Table {
 
         AtomicBoolean isTableListValid = new AtomicBoolean(false);
         for (TileList tileList : tableList) {
+            if (tileList.contains(Table.EMPTY)) break;
             isTableListValid.set(tileList.validate());
         }
         return isTableListValid.get();
@@ -112,9 +95,8 @@ public class Table {
         createEmptyTileList();
     }
 
-    public void insertTileList(TileList playerTileList, int idx) {
-        if (playerTileList.getList().isEmpty()) return;
-        TileList tileList = tableList.get(idx);
+    public void insertTileList(TileList playerTileList, TileList tileList) {
+        if (playerTileList.getList().isEmpty() || !tableList.contains(tileList)) return;
         tileList.getList().remove(EMPTY);
         tileList.insertTileList(playerTileList);
 

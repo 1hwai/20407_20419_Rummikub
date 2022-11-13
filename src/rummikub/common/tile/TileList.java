@@ -1,11 +1,13 @@
 package rummikub.common.tile;
 
+import jdk.jfr.Experimental;
 import rummikub.common.Table;
+import rummikub.common.utils.TileType;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class TileList {
+public class TileList implements TileListValidator {
 
     private final ArrayList<Tile> list = new ArrayList<>();
 
@@ -45,17 +47,38 @@ public class TileList {
     }
 
     public boolean validate() {
-        AtomicBoolean isTileListValid = new AtomicBoolean(false);
-        isTileListValid.set(validateAsASC() || validateAsSIB());
-
-        return isTileListValid.get();
+        return list.size() >= 3 && (validateAsASC() || validateAsSIB());
     }
 
-    private boolean validateAsASC() {
+    public boolean validateAsASC() {
+        TileType type = TileType.WHITE;
+        int C = 1;
+        for (Tile tile : getList())
+            if (!tile.isJoker()) {
+                C = tile.number;
+                type = tile.type;
+                break;
+            }
+        for (Tile tile : getList()) {
+            if (tile.isJoker()) break;
+            if (!tile.isType(type)) return false;
+            if (tile.number != C) return false;
+            C++;
+        }
         return true;
     }
 
-    private boolean validateAsSIB() {
+    public boolean validateAsSIB() {
+        int number = 1;
+        for (Tile tile : getList())
+            if (!tile.isJoker()) {
+                number = tile.number;
+                break;
+            }
+        for (Tile tile : getList()) {
+            if (tile.isJoker()) break;
+            if (tile.number != number) return false;
+        }
         return true;
     }
 
@@ -63,4 +86,23 @@ public class TileList {
         return list.contains(tile);
     }
 
+    @Override
+    public TileList clone() {
+        TileList clone = new TileList();
+        clone.getList().remove(Table.EMPTY);
+        for (Tile tile : getList()) {
+            clone.getList().add(new Tile(tile.number, tile.type));
+        }
+        //Used ArrayList.add() since it's easier to manage Tile.belong than TileList.insertTile().
+
+        return clone;
+    }
+
+    public void print() {
+        System.out.println(this + " {");
+        for (Tile tile : getList()) {
+            System.out.println("    " + tile.type + " " + tile.number);
+        }
+        System.out.println("}");
+    }
 }

@@ -1,8 +1,10 @@
 package rummikub.common.player;
 
-public interface PlayerHandler {
+public interface PointerAdapter {
 
     void insert();
+
+    boolean isValidToInsert();
 
     void select();
 
