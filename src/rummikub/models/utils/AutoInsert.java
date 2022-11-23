@@ -12,7 +12,7 @@ public final class AutoInsert {
         if (useAutoSorting) quickSort(list, 0, list.size() - 1);
     }
 
-    private static void quickSort(TileList list, int left, int right) {
+    public static void quickSort(TileList list, int left, int right) {
         int pl = left;
         int pr = right;
         Tile tile = list.get((pl + pr) / 2);

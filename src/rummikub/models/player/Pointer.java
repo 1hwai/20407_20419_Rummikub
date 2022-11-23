@@ -3,6 +3,7 @@ package rummikub.models.player;
 import rummikub.models.Table;
 import rummikub.models.tile.Tile;
 import rummikub.models.tile.TileList;
+import rummikub.models.utils.Movement;
 
 import java.util.ArrayList;
 import java.util.Queue;

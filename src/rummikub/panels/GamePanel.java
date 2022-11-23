@@ -8,7 +8,7 @@ import rummikub.models.player.Player;
 import rummikub.models.tile.Tile;
 import rummikub.models.tile.TileList;
 import rummikub.models.utils.InValidTableException;
-import rummikub.models.player.Movement;
+import rummikub.models.utils.Movement;
 import rummikub.models.player.Pointer;
 import rummikub.panels.components.PlasticDeck;
 import rummikub.models.tile.TileType;
@@ -258,6 +258,9 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 case KeyEvent.VK_E -> pointer.move(Movement.QUICK_RIGHT);
                 case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> pointer.move(Movement.RIGHT);
                 case KeyEvent.VK_S -> table.getCurrentPlayer().setUseAutoSorting();
+
+                //버튼 만들것!!
+                case KeyEvent.VK_ALT -> table.getCurrentPlayer().sortDeck();
 
                 case KeyEvent.VK_BACK_SPACE -> pointer.cancel();
                 case KeyEvent.VK_SHIFT -> pointer.select();

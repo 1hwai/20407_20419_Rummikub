@@ -1,4 +1,4 @@
-package rummikub.models.player;
+package rummikub.models.utils;
 
 public enum Movement {
     QUICK_LEFT,
