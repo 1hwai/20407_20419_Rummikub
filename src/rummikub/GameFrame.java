@@ -1,6 +1,6 @@
 package rummikub;
 
-import rummikub.common.panels.GamePanel;
+import rummikub.panels.GamePanel;
 
 import javax.swing.*;
 

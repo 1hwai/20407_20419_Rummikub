@@ -1,4 +1,4 @@
-package rummikub.common.utils;
+package rummikub.panels.components;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

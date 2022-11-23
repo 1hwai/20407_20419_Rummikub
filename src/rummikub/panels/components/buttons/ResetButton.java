@@ -1,4 +1,4 @@
-package rummikub.common.panels.buttons;
+package rummikub.panels.components.buttons;
 
 import java.awt.*;
 

@@ -1,6 +1,7 @@
-package rummikub.common.utils;
+package rummikub.panels.components;
 
-import rummikub.common.panels.GamePanel;
+import rummikub.panels.components.Drawable;
+import rummikub.panels.GamePanel;
 
 import java.awt.*;
 

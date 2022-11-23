@@ -1,16 +1,17 @@
-package rummikub.common.panels;
+package rummikub.panels;
 
-import rummikub.common.Table;
-import rummikub.common.panels.buttons.NextTurnButton;
-import rummikub.common.panels.buttons.ResetButton;
-import rummikub.common.player.Human;
-import rummikub.common.player.Player;
-import rummikub.common.tile.Tile;
-import rummikub.common.tile.TileList;
-import rummikub.common.utils.Movement;
-import rummikub.common.player.Pointer;
-import rummikub.common.utils.PlasticDeck;
-import rummikub.common.utils.TileType;
+import rummikub.models.Table;
+import rummikub.panels.components.buttons.NextTurnButton;
+import rummikub.panels.components.buttons.ResetButton;
+import rummikub.models.player.Human;
+import rummikub.models.player.Player;
+import rummikub.models.tile.Tile;
+import rummikub.models.tile.TileList;
+import rummikub.models.utils.InValidTableException;
+import rummikub.models.player.Movement;
+import rummikub.models.player.Pointer;
+import rummikub.panels.components.PlasticDeck;
+import rummikub.models.tile.TileType;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -30,6 +31,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     public static final int UNIT = 30;
     public static final Font COURIER_NEW = new Font("Courier new", Font.PLAIN, 28);
+    public static final Font COURIER_NEW_MEDIUM = new Font("Courier new", Font.PLAIN, 20);
     private static final Color ON_HAND_COLOR = new Color(82, 155, 218, 122);
 
     private final Boolean running;
@@ -55,7 +57,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
         initButtons();
         loadImages();
-        MouseListener();
+        addMouseListener(new RummikubMouseAdapter());
     }
 
     public void paintComponent(Graphics g) {
@@ -73,6 +75,8 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         g.setFont(COURIER_NEW);
         g.setColor(Color.white);
         g.drawString("Current Player : " + table.getCurrentPlayer().getId(), UNIT, UNIT);
+        g.setFont(COURIER_NEW_MEDIUM);
+        g.drawString("AutoSorting : " + (table.getCurrentPlayer().useAutoSorting ? "ON" : "OFF"), UNIT, 2 * UNIT);
 
         drawButtons(g);
     }
@@ -90,21 +94,21 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         int rowWidth = 0;
         for (TileList tileList : table.getTableList()) {
             int j = 0;
-            int listWidth = 2 * UNIT * tileList.getList().size();
+            int listWidth = 2 * UNIT * tileList.size();
             if (rowWidth + listWidth > TABLE_WIDTH) {
                 rowWidth = 0;
                 i++;
             }
-            for (Tile tile : tileList.getList()) {
+            for (Tile tile : tileList) {
                 int x = rowWidth + UNIT + 2 * UNIT * j;
                 int y = 3 * UNIT * (i + 1);
-                g.drawImage(getTileImg(tile), x, y, Tile.width, Tile.height, null);
-                if (table.getCurrentPlayer().getOnHand().getList().contains(tile)) {
+                g.drawImage(getTileImg(tile), x, y, Tile.WIDTH, Tile.HEIGHT, null);
+                if (table.getCurrentPlayer().getOnHand().contains(tile)) {
                     g.setColor(ON_HAND_COLOR);
-                    g.fillRect(x, y, Tile.width, Tile.height);
+                    g.fillRect(x, y, Tile.WIDTH, Tile.HEIGHT);
                 }
                 if (pointer.isTile(tile)) {
-                    g.drawImage(pointerImg, x, y, Tile.width, Tile.height, null);
+                    g.drawImage(pointerImg, x, y, Tile.WIDTH, Tile.HEIGHT, null);
                 }
                 j++;
             }
@@ -125,22 +129,22 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         if (player instanceof Human human) {
             TileList deck = human.getDeck();
             int i = 0;
-            for (Tile tile : deck.getList()) {
+            for (Tile tile : deck) {
                 int x1 = x + 2 * UNIT * (i % 18);
                 int y1 = y + WIDTH/4 * (i / 18) / 3;
-                g.drawImage(getTileImg(tile), x1, y1, Tile.width, Tile.height, null);
-                if (table.getCurrentPlayer().getOnHand().getList().contains(tile)) {
+                g.drawImage(getTileImg(tile), x1, y1, Tile.WIDTH, Tile.HEIGHT, null);
+                if (table.getCurrentPlayer().getOnHand().contains(tile)) {
                     g.setColor(ON_HAND_COLOR);
-                    g.fillRect(x1, y1, Tile.width, Tile.height);
+                    g.fillRect(x1, y1, Tile.WIDTH, Tile.HEIGHT);
                 }
                 if (pointer.isTile(tile)) {
                     g.setColor(Color.BLACK);
-                    g.drawImage(pointerImg, x1, y1, Tile.width, Tile.height, null);
+                    g.drawImage(pointerImg, x1, y1, Tile.WIDTH, Tile.HEIGHT, null);
                 }
                 i++;
             }
-            if (deck.getList().isEmpty()) {
-                g.drawImage(pointerImg, x, y, Tile.width, Tile.height, null);
+            if (deck.isEmpty()) {
+                g.drawImage(pointerImg, x, y, Tile.WIDTH, Tile.HEIGHT, null);
             }
         }
     }
@@ -215,23 +219,30 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         repaint();
     }
 
-    private void MouseListener() {
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                Point mp = new Point(e.getX(), e.getY());
+    private final class RummikubMouseAdapter extends MouseAdapter {
 
-                nextTurnBtn.ifButtonClicked(mp, () -> {
+        public RummikubMouseAdapter() {
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            Point mp = new Point(e.getX(), e.getY());
+
+            nextTurnBtn.ifClicked(mp, () -> {
+                try {
                     table.next();
-                    pointer.init();
-                    pointer.isDeckSide = true;
-                    return null;
-                });
-                resetBtn.ifButtonClicked(mp, () -> {
-                    return null;
-                });
-            }
-        });
+                } catch (InValidTableException ex) {
+                    ex.printStackTrace();
+                }
+                pointer.init();
+                pointer.isDeckSide = true;
+                return null;
+            });
+            resetBtn.ifClicked(mp, () -> {
+                table.reset();
+                return null;
+            });
+        }
     }
 
     private final class RummikubKeyAdapter extends KeyAdapter {
@@ -246,9 +257,9 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 case KeyEvent.VK_A, KeyEvent.VK_LEFT -> pointer.move(Movement.LEFT);
                 case KeyEvent.VK_E -> pointer.move(Movement.QUICK_RIGHT);
                 case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> pointer.move(Movement.RIGHT);
+                case KeyEvent.VK_S -> table.getCurrentPlayer().setUseAutoSorting();
 
                 case KeyEvent.VK_BACK_SPACE -> pointer.cancel();
-
                 case KeyEvent.VK_SHIFT -> pointer.select();
                 case KeyEvent.VK_SPACE -> pointer.swapSide();
                 case KeyEvent.VK_ENTER -> pointer.insert();

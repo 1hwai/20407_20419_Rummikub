@@ -1,12 +1,11 @@
-package rummikub.common.player;
+package rummikub.models.player;
 
-import rummikub.common.Table;
-import rummikub.common.tile.Tile;
-import rummikub.common.tile.TileList;
-import rummikub.common.utils.Movement;
-import rummikub.common.utils.TileType;
+import rummikub.models.Table;
+import rummikub.models.tile.Tile;
+import rummikub.models.tile.TileList;
 
 import java.util.ArrayList;
+import java.util.Queue;
 
 public class Pointer implements PointerAdapter {
 
@@ -24,43 +23,41 @@ public class Pointer implements PointerAdapter {
 
     public void init() {
         tileList = isDeckSide ? table.getCurrentPlayer().getDeck() : table.getTableList().get(0);
-        tile = table.getCurrentPlayer().getDeck().getList().get(0);
+        tile = table.getCurrentPlayer().getDeck().get(0);
     }
 
     public void swapSide() {
         isDeckSide = !isDeckSide;
         init();
         if (!isDeckSide){
-            tile = tileList.getList().get(0);
+            tile = tileList.get(0);
         }
     }
 
     public void move(Movement movement) {
         if (!isAbleToMove()) return;
         if (isDeckSide) {
-            ArrayList<Tile> list = table.getCurrentPlayer().getDeck().getList();
-            int idx = list.indexOf(tile);
+            TileList deck = table.getCurrentPlayer().getDeck();
+            int idx = deck.indexOf(tile);
             if (movement == Movement.LEFT) {
-                tile = list.get(idx > 0 ? idx - 1 : list.size() - 1);
+                tile = deck.get(idx > 0 ? idx - 1 : deck.size() - 1);
             } else if (movement == Movement.RIGHT) {
-                tile = list.get((idx + 1) % list.size());
+                tile = deck.get((idx + 1) % deck.size());
             }
         } else {
-            // table에서 pointer 움직임, 위 if 문 참고할 것
             ArrayList<TileList> tableList = table.getTableList();
             int listIdx = tableList.indexOf(tileList);
-            ArrayList<Tile> list = tileList.getList();
-            int idx = tileList.getList().indexOf(tile);
+            int idx = tileList.indexOf(tile);
             switch (movement) {
-                case LEFT -> tile = list.get(idx > 0 ? idx - 1 : list.size() - 1);
-                case RIGHT -> tile = list.get((idx + 1) % list.size());
+                case LEFT -> tile = tileList.get(idx > 0 ? idx - 1 : tileList.size() - 1);
+                case RIGHT -> tile = tileList.get((idx + 1) % tileList.size());
                 case QUICK_LEFT -> {
                     tileList = tableList.get(listIdx > 0 ? listIdx - 1 : tableList.size() - 1);
-                    tile = tileList.getList().get(0);
+                    tile = tileList.get(0);
                 }
                 case QUICK_RIGHT -> {
                     tileList = tableList.get((listIdx + 1) % tableList.size());
-                    tile = tileList.getList().get(0);
+                    tile = tileList.get(0);
                 }
             }
         }
@@ -68,7 +65,7 @@ public class Pointer implements PointerAdapter {
 
     private boolean isAbleToMove() {
         if (isDeckSide) {
-            return !table.getCurrentPlayer().getDeck().getList().isEmpty();
+            return !table.getCurrentPlayer().getDeck().isEmpty();
         } else {
             return !table.getTableList().isEmpty();
         }
@@ -86,23 +83,11 @@ public class Pointer implements PointerAdapter {
     public void insert() {
         if (isDeckSide) return;
 
-        if (isValidToInsert()) {
-            table.setChanged();
-            TileList onHand = table.getCurrentPlayer().getOnHand();
-            table.insertTileList(onHand, tileList);
-            onHand.getList().clear();
-        }
-    }
+        table.setChanged();
+        Queue<Tile> onHand = table.getCurrentPlayer().getOnHand();
+        table.insertTileList(tileList, onHand);
 
-    @Override
-    public boolean isValidToInsert() {
-        TileList clone = tileList.clone();
-        TileList onHandClone = table.getCurrentPlayer().getOnHand().clone();
-
-        clone.insertTileList(onHandClone);
-        clone.getList().removeIf(t -> t.isType(TileType.EMPTY));
-
-        return clone.validate();
+        table.getTableList().removeIf(ArrayList::isEmpty);
     }
 
     @Override
@@ -113,9 +98,8 @@ public class Pointer implements PointerAdapter {
 
     @Override
     public void cancel() {
-        TileList onHand = table.getCurrentPlayer().getOnHand();
-        if (!onHand.getList().isEmpty()) onHand.extractTile(onHand.getList().size() - 1);
-
+        Queue<Tile> onHand = table.getCurrentPlayer().getOnHand();
+        onHand.poll();
     }
 
 }

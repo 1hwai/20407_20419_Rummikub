@@ -1,4 +1,4 @@
-package rummikub.common.player;
+package rummikub.models.player;
 
 public class Human extends Player {
 

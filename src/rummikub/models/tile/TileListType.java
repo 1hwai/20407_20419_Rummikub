@@ -1,4 +1,4 @@
-package rummikub.common.tile;
+package rummikub.models.tile;
 
 public enum TileListType {
     ASCENDING,

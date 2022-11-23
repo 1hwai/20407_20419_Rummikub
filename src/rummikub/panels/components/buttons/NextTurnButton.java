@@ -1,7 +1,6 @@
-package rummikub.common.panels.buttons;
+package rummikub.panels.components.buttons;
 
 import java.awt.*;
-import java.util.function.Consumer;
 
 public class NextTurnButton extends Button {
 

@@ -1,10 +1,8 @@
-package rummikub.common.player;
+package rummikub.models.player;
 
 public interface PointerAdapter {
 
     void insert();
-
-    boolean isValidToInsert();
 
     void select();
 

@@ -1,6 +1,6 @@
-package rummikub.common.panels.buttons;
+package rummikub.panels.components.buttons;
 
-import rummikub.common.utils.Drawable;
+import rummikub.panels.components.Drawable;
 
 import java.awt.*;
 import java.util.function.Supplier;
@@ -17,7 +17,7 @@ public abstract class Button extends Drawable {
         return false;
     }
 
-    public void ifButtonClicked(Point mp, Supplier<Void> f) {
+    public void ifClicked(Point mp, Supplier<Void> f) {
         if (isButtonClicked(mp)) {
             f.get();
         }

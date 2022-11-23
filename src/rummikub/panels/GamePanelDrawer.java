@@ -1,6 +1,6 @@
-package rummikub.common.panels;
+package rummikub.panels;
 
-import rummikub.common.player.Player;
+import rummikub.models.player.Player;
 
 import java.awt.*;
 

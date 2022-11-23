@@ -1,4 +1,4 @@
-package rummikub.common.utils;
+package rummikub.models.tile;
 
 public enum TileType {
     BLUE("B"),
