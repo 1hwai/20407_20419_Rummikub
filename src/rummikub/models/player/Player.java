@@ -47,6 +47,7 @@ public abstract class Player implements BackUpManager {
     public void reset() {
         deck.clear();
         deck = deckClone.clone();
+        onHand.clear();
     }
 
     public void action(Table table) {
@@ -83,28 +84,32 @@ public abstract class Player implements BackUpManager {
     }
 
     public void sortDeck() {
+
         if (isDeckASC) {
             AutoInsert.quickSort(deck, 0, deck.size() - 1);
         } else {
             TileList newDeck = new TileList();
 
             Map<TileType, TileList> map = new HashMap<>();
-            for (TileType type : TileType.values()) map.put(type, new TileList());
+            for (TileType type : TileType.values()) if (type != TileType.EMPTY) map.put(type, new TileList());
 
             for (Tile tile : deck) {
                 if (tile.isJoker()) {
-                    newDeck.add(tile);
-                    break;
+                    newDeck.add(newDeck.size(), tile);
+                } else {
+                    map.get(tile.type).add(map.get(tile.type).size(), tile);
                 }
-                map.get(tile.type).add(map.get(tile.type).size(), tile);
             }
             for (TileType type : TileType.values()) {
                 if (type == TileType.EMPTY) break;
                 AutoInsert.quickSort(map.get(type), 0, map.get(type).size() - 1);
+//                for (Tile tile : map.get(type)) newDeck.add(tile);
                 newDeck.addAll(map.get(type));
             }
 
-            deck = newDeck;
+            for (Tile tile : newDeck) {
+                deck.add(tile);
+            }
         }
 
         isDeckASC = !isDeckASC;

@@ -260,7 +260,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 case KeyEvent.VK_S -> table.getCurrentPlayer().setUseAutoSorting();
 
                 //버튼 만들것!!
-                case KeyEvent.VK_ALT -> table.getCurrentPlayer().sortDeck();
+                case KeyEvent.VK_X -> table.getCurrentPlayer().sortDeck();
 
                 case KeyEvent.VK_BACK_SPACE -> pointer.cancel();
                 case KeyEvent.VK_SHIFT -> pointer.select();

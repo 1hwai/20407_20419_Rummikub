@@ -21,7 +21,7 @@ public final class AutoInsert {
             while (list.get(pl).number < tile.number) pl++;
             while (list.get(pr).number > tile.number) pr--;
             if (pl <= pr) swap(list, pl++, pr--);
-        } while (pl < pr);
+        } while (pl <= pr);
 
         if (left < pr) quickSort(list, left, pr);
         if (right > pl) quickSort(list, pl, right);

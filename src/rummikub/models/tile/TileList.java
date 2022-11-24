@@ -66,9 +66,7 @@ public class TileList extends ArrayList<Tile> implements TileListValidator {
         return true;
     }
 
-    public int sum() throws IllegalTileListException {
-        if (size() < 3) throw new IllegalTileListException("TileList not Summable : TileList should have more than 3 tiles. ");
-
+    public int sum() {
         int n = 1, i = 0;
         for (Tile tile : this) {
             if (!tile.isJoker()) {
@@ -82,8 +80,12 @@ public class TileList extends ArrayList<Tile> implements TileListValidator {
             // sum of arithmetic sequences
             // 등차수열의 합
         else if (isSIB()) return size() * n;
-        else throw new IllegalTileListException("TileList not Summable : tried to sum invalid TileList. ");
 
+        return -1;
+    }
+
+    public boolean isSummable() {
+        return size() >= 3;
     }
 
     @Override

@@ -127,6 +127,14 @@ public class Table implements BackUpManager {
     public void insertTileList(TileList tileList, Queue<Tile> onHand) {
         if (onHand.isEmpty() || !tableList.contains(tileList)) return;
         tileList.remove(EMPTY);
+
+        if (!getCurrentPlayer().isRegistered()) {
+            TileList onHand0 = new TileList();
+            for (Tile tile : onHand) onHand0.add(onHand0.size(), tile);
+            if (onHand0.isSummable() && onHand0.sum() >= 30) {
+                getCurrentPlayer().setRegistered();
+            }
+        }
         AutoInsert.autoInsert(tileList, onHand, getCurrentPlayer().useAutoSorting);
 
         if (tableList.indexOf(tileList) == tableList.size() - 1)
