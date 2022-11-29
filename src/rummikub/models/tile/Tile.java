@@ -2,9 +2,9 @@ package rummikub.models.tile;
 
 public class Tile {
 
-    public int number;
+    public final int number;
     //Joker.number should be 0.
-    public TileType type;
+    public final TileType type;
     private TileList parent;
 
     public static final int WIDTH = 60, HEIGHT = 80;
@@ -38,7 +38,4 @@ public class Tile {
         return number == 0;
     }
 
-    public void print() {
-        System.out.println(type + " " + number);
-    }
 }

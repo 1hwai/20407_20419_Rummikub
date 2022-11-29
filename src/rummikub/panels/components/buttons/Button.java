@@ -23,9 +23,4 @@ public abstract class Button extends Drawable {
         }
     }
 
-    @Deprecated
-    public boolean isAvailableToClick() {
-        return false;
-    }
-
 }

@@ -4,7 +4,6 @@ import rummikub.models.player.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class FinishFrame extends JFrame {
 
@@ -27,7 +26,7 @@ public class FinishFrame extends JFrame {
 
     }
 
-    private final class TitlePanel extends JPanel {
+    private static final class TitlePanel extends JPanel {
         public TitlePanel() {
             setBounds(100, 100, 600, 150);
             setBackground(Color.BLACK);
@@ -41,7 +40,7 @@ public class FinishFrame extends JFrame {
         }
     }
 
-    private final class NamePanel extends JPanel {
+    private static final class NamePanel extends JPanel {
         public NamePanel(Player winner) {
             setBounds(100, 100, 600, 150);
             setBackground(Color.BLACK);

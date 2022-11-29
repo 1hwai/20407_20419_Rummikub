@@ -36,7 +36,7 @@ public class MenuFrame extends JFrame {
 
     }
 
-    private final class TitlePanel extends JPanel {
+    private static final class TitlePanel extends JPanel {
         public TitlePanel() {
             setBackground(Color.BLACK);
 

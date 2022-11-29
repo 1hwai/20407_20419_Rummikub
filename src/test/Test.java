@@ -7,7 +7,8 @@ import rummikub.models.tile.TileList;
 import rummikub.models.tile.TileType;
 import rummikub.models.utils.AutoInsert;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Test {
     public static void main(String[] args) {

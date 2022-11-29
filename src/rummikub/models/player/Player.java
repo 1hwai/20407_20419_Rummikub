@@ -96,15 +96,14 @@ public abstract class Player implements BackUpManager {
 
             for (Tile tile : deck) {
                 if (tile.isJoker()) {
-                    newDeck.add(newDeck.size(), tile);
+                    newDeck.add(tile);
                 } else {
-                    map.get(tile.type).add(map.get(tile.type).size(), tile);
+                    map.get(tile.type).add(tile);
                 }
             }
             for (TileType type : TileType.values()) {
                 if (type == TileType.EMPTY) break;
                 AutoInsert.quickSort(map.get(type), 0, map.get(type).size() - 1);
-//                for (Tile tile : map.get(type)) newDeck.add(tile);
                 newDeck.addAll(map.get(type));
             }
 
@@ -114,10 +113,6 @@ public abstract class Player implements BackUpManager {
         }
 
         isDeckASC = !isDeckASC;
-    }
-
-    public void reduceOnHand() {
-        onHand.remove();
     }
 
     public void setRegistered() {

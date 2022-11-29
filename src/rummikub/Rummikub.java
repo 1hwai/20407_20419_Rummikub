@@ -1,6 +1,5 @@
 package rummikub;
 
-import rummikub.frames.GameFrame;
 import rummikub.frames.MenuFrame;
 
 import java.awt.*;

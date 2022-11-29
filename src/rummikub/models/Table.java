@@ -3,10 +3,10 @@ package rummikub.models;
 import rummikub.models.player.Player;
 import rummikub.models.tile.Tile;
 import rummikub.models.tile.TileList;
-import rummikub.models.utils.AutoInsert;
-import rummikub.models.utils.InValidTableException;
-import rummikub.models.utils.BackUpManager;
 import rummikub.models.tile.TileType;
+import rummikub.models.utils.AutoInsert;
+import rummikub.models.utils.BackUpManager;
+import rummikub.models.utils.InValidTableException;
 
 import java.util.ArrayList;
 import java.util.Queue;
@@ -16,7 +16,7 @@ public class Table implements BackUpManager {
     private final ArrayList<TileList> tableList = new ArrayList<>();
     private final ArrayList<TileList> tableListClone = new ArrayList<>();
 
-    private ArrayList<Player> players = new ArrayList<>();
+    private final ArrayList<Player> players;
     private Player currentPlayer;
     public Player winner;
 
@@ -29,21 +29,12 @@ public class Table implements BackUpManager {
     public static final Tile EMPTY = new Tile(1, TileType.EMPTY);
 
     public Table(ArrayList<Player> players) {
-        init(players);
-        test();
-    }
-
-    private void init(ArrayList<Player> players) {
         createEmptyTileList();
         this.players = players;
         this.players.forEach(p -> p.init(sack));
         currentPlayer = this.players.get(0);
         save();
         getCurrentPlayer().action(this);
-    }
-
-    private void test() {
-
     }
 
     public void next() throws InValidTableException {
@@ -63,7 +54,6 @@ public class Table implements BackUpManager {
         save();
         getCurrentPlayer().save();
         updateCurrentPlayer();
-        setUnChanged();
         getCurrentPlayer().action(this);
 
         if (!sack.isExtractable()) {
@@ -104,13 +94,6 @@ public class Table implements BackUpManager {
 
         getCurrentPlayer().reset();
 
-        setUnChanged();
-    }
-
-    public void setChanged() {
-    }
-
-    public void setUnChanged() {
     }
 
     public boolean validate() {
@@ -153,7 +136,6 @@ public class Table implements BackUpManager {
 
         tileList.remove(EMPTY);
         AutoInsert.autoInsert(tileList, onHand, getCurrentPlayer().useAutoSorting);
-        setChanged();
         if (tableList.indexOf(tileList) == tableList.size() - 1)
             createEmptyTileList();
     }
@@ -169,7 +151,4 @@ public class Table implements BackUpManager {
         tableList.add(emptyTileList);
     }
 
-    public int getTurn() {
-        return turn;
-    }
 }
