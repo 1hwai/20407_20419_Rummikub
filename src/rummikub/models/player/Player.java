@@ -70,7 +70,7 @@ public abstract class Player implements BackUpManager {
         deck.addTile(tile);
     }
 
-    private void initOnHand() {
+    protected void initOnHand() {
         onHand.clear();
     }
 

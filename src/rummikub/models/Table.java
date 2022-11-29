@@ -102,7 +102,7 @@ public class Table implements BackUpManager {
 
         createEmptyTileList();
 
-        currentPlayer.reset();
+        getCurrentPlayer().reset();
 
         setUnChanged();
     }
@@ -142,7 +142,10 @@ public class Table implements BackUpManager {
         if (onHand.isEmpty() || !tableList.contains(tileList)) return;
         if (!getCurrentPlayer().isRegistered()) {
             TileList onHand0 = new TileList();
-            for (Tile tile : onHand) onHand0.add(onHand0.size(), tile);
+            for (Tile tile : onHand) {
+                if (!tile.isParent(getCurrentPlayer().getDeck())) return;
+                onHand0.add(onHand0.size(), tile);
+            }
             if (onHand0.isSummable() && onHand0.sum() >= 30) {
                 getCurrentPlayer().setRegistered();
             } else return;
@@ -150,7 +153,6 @@ public class Table implements BackUpManager {
 
         tileList.remove(EMPTY);
         AutoInsert.autoInsert(tileList, onHand, getCurrentPlayer().useAutoSorting);
-
         setChanged();
         if (tableList.indexOf(tileList) == tableList.size() - 1)
             createEmptyTileList();
@@ -167,4 +169,7 @@ public class Table implements BackUpManager {
         tableList.add(emptyTileList);
     }
 
+    public int getTurn() {
+        return turn;
+    }
 }

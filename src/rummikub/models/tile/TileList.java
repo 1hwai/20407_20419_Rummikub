@@ -84,6 +84,11 @@ public class TileList extends ArrayList<Tile> implements TileListValidator {
         return size() >= 3;
     }
 
+    public boolean hasJoker() {
+        for (Tile tile : this) if (tile.isJoker()) return true;
+        return false;
+    }
+
     @Override
     public TileList clone() {
         TileList clone = new TileList();

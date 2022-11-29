@@ -26,6 +26,10 @@ public class Tile {
         return parent != null;
     }
 
+    public boolean isParent(TileList tileList) {
+        return parent == tileList;
+    }
+
     public boolean isType(TileType type) {
         return this.type == type;
     }

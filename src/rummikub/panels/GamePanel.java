@@ -47,10 +47,10 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     private final Pointer pointer;
 
     public GamePanel(ArrayList<Player> players) {
-        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        this.setBackground(Color.BLACK);
-        this.setFocusable(true);
-        this.addKeyListener(new RummikubKeyAdapter());
+        setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        setBackground(Color.BLACK);
+        setFocusable(true);
+        addKeyListener(new RummikubKeyAdapter());
 
         Timer timer = new Timer(DELAY, this);
         timer.start();
@@ -63,6 +63,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         addMouseListener(new RummikubMouseAdapter());
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         draw(g);
@@ -86,7 +87,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     @Override
     public void drawAlert() {
-        JOptionPane.showMessageDialog(null, "WARNING","InValid Tile Insertion", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "InValid Tile Insertion","WARNING", JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
