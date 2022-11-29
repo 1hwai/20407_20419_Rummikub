@@ -16,14 +16,14 @@ public class TileSack {
             for (int i = 1; i < 14; i++) {
                 Tile tile0 = new Tile(i, type);
                 Tile tile1 = new Tile(i, type);
-                sack.add(tile0);
-                sack.add(tile1);
+                sack.addTile(tile0);
+                sack.addTile(tile1);
             }
         }
         Tile blackJoker = new Tile(0, TileType.WHITE);
         Tile redJoker = new Tile(0, TileType.RED);
-        sack.add(blackJoker);
-        sack.add(redJoker);
+        sack.addTile(blackJoker);
+        sack.addTile(redJoker);
     }
 
     public Tile extractTile() {

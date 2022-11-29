@@ -14,7 +14,7 @@ public class Test {
         TileSack sack = new TileSack();
         TileList deck = new TileList();
         for (int i = 0; i < 14; i++) {
-            deck.add(sack.extractTile());
+            deck.addTile(sack.extractTile());
         }
 
         deck.print();
@@ -25,7 +25,7 @@ public class Test {
 
         for (Tile tile : deck) {
             if (tile.isJoker()) {
-                newDeck.add(tile);
+                newDeck.addTile(tile);
                 break;
             }
             map.get(tile.type).add(map.get(tile.type).size(), tile);

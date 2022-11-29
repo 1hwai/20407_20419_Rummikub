@@ -1,7 +1,5 @@
 package rummikub.models.tile;
 
-import rummikub.models.utils.IllegalTileListException;
-
 import java.util.ArrayList;
 
 public class TileList extends ArrayList<Tile> implements TileListValidator {
@@ -9,11 +7,9 @@ public class TileList extends ArrayList<Tile> implements TileListValidator {
     public TileList() {
     }
 
-    public boolean add(Tile tile) {
+    public void addTile(Tile tile) {
         super.add(tile);
         tile.setParent(this);
-
-        return true;
     }
 
     public boolean validate() {
@@ -92,7 +88,7 @@ public class TileList extends ArrayList<Tile> implements TileListValidator {
     public TileList clone() {
         TileList clone = new TileList();
         for (Tile tile : this) {
-            clone.add(new Tile(tile.number, tile.type));
+            clone.addTile(new Tile(tile.number, tile.type));
         }
 
         return clone;

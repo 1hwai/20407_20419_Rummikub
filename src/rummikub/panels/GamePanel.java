@@ -1,17 +1,16 @@
 package rummikub.panels;
 
 import rummikub.models.Table;
-import rummikub.panels.components.buttons.NextTurnButton;
-import rummikub.panels.components.buttons.ResetButton;
-import rummikub.models.player.Human;
 import rummikub.models.player.Player;
+import rummikub.models.player.Pointer;
 import rummikub.models.tile.Tile;
 import rummikub.models.tile.TileList;
+import rummikub.models.tile.TileType;
 import rummikub.models.utils.InValidTableException;
 import rummikub.models.utils.Movement;
-import rummikub.models.player.Pointer;
 import rummikub.panels.components.PlasticDeck;
-import rummikub.models.tile.TileType;
+import rummikub.panels.components.buttons.NextTurnButton;
+import rummikub.panels.components.buttons.ResetButton;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,6 +19,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener {
 
@@ -30,11 +30,12 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     private static final int DELAY = 1000 / FPS;
 
     public static final int UNIT = 30;
-    public static final Font COURIER_NEW = new Font("Courier new", Font.PLAIN, 28);
-    public static final Font COURIER_NEW_MEDIUM = new Font("Courier new", Font.PLAIN, 20);
+
+    public static final Font TIMES_NEW_ROMAN_TITLE = new Font("Times new Roman", Font.PLAIN, 30);
+    public static final Font TIMES_NEW_ROMAN_MID = new Font("Times new Roman", Font.PLAIN, 20);
     private static final Color ON_HAND_COLOR = new Color(82, 155, 218, 122);
 
-    private final Boolean running;
+    public Boolean running;
 
     private final ArrayList<BufferedImage> tileImages = new ArrayList<>();
     private BufferedImage pointerImg = null;
@@ -42,10 +43,10 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
     private NextTurnButton nextTurnBtn;
     private ResetButton resetBtn;
 
-    private final Table table = new Table();
-    private final Pointer pointer = new Pointer(table);
+    public final Table table;
+    private final Pointer pointer;
 
-    public GamePanel() {
+    public GamePanel(ArrayList<Player> players) {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.BLACK);
         this.setFocusable(true);
@@ -55,6 +56,8 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
         timer.start();
         running = true;
 
+        table = new Table(players);
+        pointer = new Pointer(table);
         initButtons();
         loadImages();
         addMouseListener(new RummikubMouseAdapter());
@@ -72,13 +75,18 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     @Override
     public void drawIndicators(Graphics g) {
-        g.setFont(COURIER_NEW);
+        g.setFont(TIMES_NEW_ROMAN_TITLE);
         g.setColor(Color.white);
         g.drawString("Current Player : " + table.getCurrentPlayer().getId(), UNIT, UNIT);
-        g.setFont(COURIER_NEW_MEDIUM);
+        g.setFont(TIMES_NEW_ROMAN_MID);
         g.drawString("AutoSorting : " + (table.getCurrentPlayer().useAutoSorting ? "ON" : "OFF"), UNIT, 2 * UNIT);
 
         drawButtons(g);
+    }
+
+    @Override
+    public void drawAlert() {
+        JOptionPane.showMessageDialog(null, "WARNING","InValid Tile Insertion", JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
@@ -126,26 +134,24 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
         plasticDeck.draw(g);
 
-        if (player instanceof Human human) {
-            TileList deck = human.getDeck();
-            int i = 0;
-            for (Tile tile : deck) {
-                int x1 = x + 2 * UNIT * (i % 18);
-                int y1 = y + WIDTH/4 * (i / 18) / 3;
-                g.drawImage(getTileImg(tile), x1, y1, Tile.WIDTH, Tile.HEIGHT, null);
-                if (table.getCurrentPlayer().getOnHand().contains(tile)) {
-                    g.setColor(ON_HAND_COLOR);
-                    g.fillRect(x1, y1, Tile.WIDTH, Tile.HEIGHT);
-                }
-                if (pointer.isTile(tile)) {
-                    g.setColor(Color.BLACK);
-                    g.drawImage(pointerImg, x1, y1, Tile.WIDTH, Tile.HEIGHT, null);
-                }
-                i++;
+        TileList deck = player.getDeck();
+        int i = 0;
+        for (Tile tile : deck) {
+            int x1 = x + 2 * UNIT * (i % 18);
+            int y1 = y + WIDTH/4 * (i / 18) / 3;
+            g.drawImage(getTileImg(tile), x1, y1, Tile.WIDTH, Tile.HEIGHT, null);
+            if (table.getCurrentPlayer().getOnHand().contains(tile)) {
+                g.setColor(ON_HAND_COLOR);
+                g.fillRect(x1, y1, Tile.WIDTH, Tile.HEIGHT);
             }
-            if (deck.isEmpty()) {
-                g.drawImage(pointerImg, x, y, Tile.WIDTH, Tile.HEIGHT, null);
+            if (pointer.isTile(tile)) {
+                g.setColor(Color.BLACK);
+                g.drawImage(pointerImg, x1, y1, Tile.WIDTH, Tile.HEIGHT, null);
             }
+            i++;
+        }
+        if (deck.isEmpty()) {
+            g.drawImage(pointerImg, x, y, Tile.WIDTH, Tile.HEIGHT, null);
         }
     }
 
@@ -162,15 +168,15 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                 if (type == TileType.EMPTY) break;
                 String typeCode = type.getTypeCode();
                 for (int i = 1; i < 14; i++) {
-                    tileImages.add(ImageIO.read(getClass().getResource(SOURCE + typeCode + i + ".png")));
+                    tileImages.add(ImageIO.read(Objects.requireNonNull(getClass().getResource(SOURCE + typeCode + i + ".png"))));
                     System.out.println(SOURCE + typeCode + i + ".png" + " has been Successfully loaded");
                 }
             }
-            tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "RED_JOKER.png")));
-            tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "WHITE_JOKER.png")));
+            tileImages.add(ImageIO.read(Objects.requireNonNull(getClass().getResource(SOURCE + "RED_JOKER.png"))));
+            tileImages.add(ImageIO.read(Objects.requireNonNull(getClass().getResource(SOURCE + "WHITE_JOKER.png"))));
             System.out.println(SOURCE + "RED_JOKER.png" + " has been Successfully loaded");
             System.out.println(SOURCE + "WHITE_JOKER.png" + " has been Successfully loaded");
-            tileImages.add(ImageIO.read(getClass().getResource(SOURCE + "EMPTY.png")));
+            tileImages.add(ImageIO.read(Objects.requireNonNull(getClass().getResource(SOURCE + "EMPTY.png"))));
             System.out.println(SOURCE + "EMPTY.png" + " has been Successfully loaded");
 
             System.out.println("**********************");
@@ -181,7 +187,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
             plasticDeck.setImage("/resources/utils/PLASTIC_DECK.png");
             System.out.println("/resources/utils/PLASTIC_DECK.png has been Successfully loaded");
-            pointerImg = ImageIO.read(getClass().getResource("/resources/utils/POINTER.png"));
+            pointerImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/resources/utils/POINTER.png")));
             System.out.println("/resources/utils/POINTER.png has been Successfully loaded");
 
             nextTurnBtn.setImage("/resources/indicators/NEXT_TURN_BTN.png");
@@ -214,8 +220,6 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (running) {
-        }
         repaint();
     }
 
@@ -233,6 +237,7 @@ public class GamePanel extends JPanel implements GamePanelDrawer, ActionListener
                     table.next();
                 } catch (InValidTableException ex) {
                     ex.printStackTrace();
+                    drawAlert();
                 }
                 pointer.init();
                 pointer.isDeckSide = true;

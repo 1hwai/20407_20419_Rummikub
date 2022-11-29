@@ -32,7 +32,7 @@ public abstract class Player implements BackUpManager {
 
     public void init(TileSack sack) {
         for (int i = 0; i < 14; i++) {
-            deck.add(sack.extractTile());
+            deck.addTile(sack.extractTile());
         }
         save();
     }
@@ -47,10 +47,11 @@ public abstract class Player implements BackUpManager {
     public void reset() {
         deck.clear();
         deck = deckClone.clone();
-        onHand.clear();
+        initOnHand();
     }
 
     public void action(Table table) {
+        initOnHand();
     }
 
     public TileList getDeck() {
@@ -66,10 +67,10 @@ public abstract class Player implements BackUpManager {
     }
 
     public void addToDeck(Tile tile) {
-        deck.add(tile);
+        deck.addTile(tile);
     }
 
-    public void initOnHand() {
+    private void initOnHand() {
         onHand.clear();
     }
 
@@ -108,7 +109,7 @@ public abstract class Player implements BackUpManager {
             }
 
             for (Tile tile : newDeck) {
-                deck.add(tile);
+                deck.addTile(tile);
             }
         }
 

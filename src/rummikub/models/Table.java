@@ -1,6 +1,5 @@
 package rummikub.models;
 
-import rummikub.models.player.Human;
 import rummikub.models.player.Player;
 import rummikub.models.tile.Tile;
 import rummikub.models.tile.TileList;
@@ -17,26 +16,28 @@ public class Table implements BackUpManager {
     private final ArrayList<TileList> tableList = new ArrayList<>();
     private final ArrayList<TileList> tableListClone = new ArrayList<>();
 
-    private final ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
-    private boolean hasChanged = false;
+    public Player winner;
+
+    private int turn = 1;
+
+    public boolean hasFinished = false;
 
     private final TileSack sack = new TileSack();
 
     public static final Tile EMPTY = new Tile(1, TileType.EMPTY);
 
-    public Table() {
-        init();
+    public Table(ArrayList<Player> players) {
+        init(players);
         test();
     }
 
-    private void init() {
+    private void init(ArrayList<Player> players) {
         createEmptyTileList();
-        //Prototype Player inserting code
-        players.add(new Human("hawon"));
-        players.add(new Human("donghyup"));
-        players.forEach(p -> p.init(sack));
-        currentPlayer = players.get(0);
+        this.players = players;
+        this.players.forEach(p -> p.init(sack));
+        currentPlayer = this.players.get(0);
         save();
         getCurrentPlayer().action(this);
     }
@@ -50,8 +51,13 @@ public class Table implements BackUpManager {
             throw new InValidTableException();
         }
 
-        if (currentPlayer.getDeck().isEmpty()) players.remove(currentPlayer);
-        if (!hasChanged && sack.isExtractable() && players.contains(currentPlayer))
+        if (getCurrentPlayer().getDeck().isEmpty()) {
+            System.out.println(currentPlayer.getId());
+            winner = currentPlayer;
+            hasFinished = true;
+            players.remove(currentPlayer);
+        }
+        if (sack.isExtractable() && players.contains(currentPlayer))
             currentPlayer.addToDeck(sack.extractTile());
 
         save();
@@ -59,6 +65,16 @@ public class Table implements BackUpManager {
         updateCurrentPlayer();
         setUnChanged();
         getCurrentPlayer().action(this);
+
+        if (!sack.isExtractable()) {
+            winner = getCurrentPlayer();
+            for (Player player : players) {
+                if (winner.getDeck().size() > player.getDeck().size()) {
+                    winner = player;
+                }
+            }
+            hasFinished = true;
+        }
     }
 
     @Override
@@ -87,18 +103,18 @@ public class Table implements BackUpManager {
         createEmptyTileList();
 
         currentPlayer.reset();
+
+        setUnChanged();
     }
 
     public void setChanged() {
-        hasChanged = true;
     }
 
     public void setUnChanged() {
-        hasChanged = false;
     }
 
     public boolean validate() {
-//        tableList.removeIf(ArrayList::isEmpty);
+        tableList.removeIf(ArrayList::isEmpty);
 
         int i = 0;
         for (TileList tileList : tableList) {
@@ -111,9 +127,7 @@ public class Table implements BackUpManager {
     }
 
     private void updateCurrentPlayer() {
-        currentPlayer.initOnHand();
-        int idx = (players.indexOf(currentPlayer) + 1) % players.size();
-        currentPlayer = players.get(idx);
+        currentPlayer = players.get(turn++ % players.size());
     }
 
     public Player getCurrentPlayer() {
@@ -126,17 +140,18 @@ public class Table implements BackUpManager {
 
     public void insertTileList(TileList tileList, Queue<Tile> onHand) {
         if (onHand.isEmpty() || !tableList.contains(tileList)) return;
-        tileList.remove(EMPTY);
-
         if (!getCurrentPlayer().isRegistered()) {
             TileList onHand0 = new TileList();
             for (Tile tile : onHand) onHand0.add(onHand0.size(), tile);
             if (onHand0.isSummable() && onHand0.sum() >= 30) {
                 getCurrentPlayer().setRegistered();
-            }
+            } else return;
         }
+
+        tileList.remove(EMPTY);
         AutoInsert.autoInsert(tileList, onHand, getCurrentPlayer().useAutoSorting);
 
+        setChanged();
         if (tableList.indexOf(tileList) == tableList.size() - 1)
             createEmptyTileList();
     }
@@ -148,7 +163,7 @@ public class Table implements BackUpManager {
         }
 
         TileList emptyTileList = new TileList();
-        emptyTileList.add(EMPTY);
+        emptyTileList.addTile(EMPTY);
         tableList.add(emptyTileList);
     }
 

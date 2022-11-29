@@ -84,7 +84,6 @@ public class Pointer implements PointerAdapter {
     public void insert() {
         if (isDeckSide) return;
 
-        table.setChanged();
         Queue<Tile> onHand = table.getCurrentPlayer().getOnHand();
         table.insertTileList(tileList, onHand);
 

@@ -8,11 +8,12 @@ import java.util.Queue;
 public final class AutoInsert {
 
     public static void autoInsert(TileList list, Queue<Tile> queue, Boolean useAutoSorting) {
-        while (!queue.isEmpty()) list.add(queue.poll());
+        while (!queue.isEmpty()) list.addTile(queue.poll());
         if (useAutoSorting) quickSort(list, 0, list.size() - 1);
     }
 
     public static void quickSort(TileList list, int left, int right) {
+        if (list.isEmpty()) return;
         int pl = left;
         int pr = right;
         Tile tile = list.get((pl + pr) / 2);
@@ -21,7 +22,7 @@ public final class AutoInsert {
             while (list.get(pl).number < tile.number) pl++;
             while (list.get(pr).number > tile.number) pr--;
             if (pl <= pr) swap(list, pl++, pr--);
-        } while (pl <= pr);
+        } while (pl < pr);
 
         if (left < pr) quickSort(list, left, pr);
         if (right > pl) quickSort(list, pl, right);
