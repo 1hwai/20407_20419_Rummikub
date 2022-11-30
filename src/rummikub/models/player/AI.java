@@ -81,7 +81,6 @@ public class AI extends Player {
                                     }
                                 }
                             }
-                            prototype.print();
                             tileListClone = prototype;
 
 //                            prototype.print();

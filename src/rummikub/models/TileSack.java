@@ -24,6 +24,7 @@ public class TileSack {
         Tile redJoker = new Tile(0, TileType.RED);
         sack.addTile(blackJoker);
         sack.addTile(redJoker);
+        System.out.println("Sack.size() : " + sack.size());
     }
 
     public Tile extractTile() {
