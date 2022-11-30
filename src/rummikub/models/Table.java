@@ -42,12 +42,8 @@ public class Table implements BackUpManager {
             throw new InValidTableException();
         }
 
-        if (getCurrentPlayer().getDeck().isEmpty()) {
-            System.out.println(currentPlayer.getId());
-            winner = currentPlayer;
-            hasFinished = true;
-            players.remove(currentPlayer);
-        }
+        ifFinished();
+
         if (sack.isExtractable() && players.contains(currentPlayer))
             currentPlayer.addToDeck(sack.extractTile());
 
@@ -56,6 +52,16 @@ public class Table implements BackUpManager {
         updateCurrentPlayer();
         getCurrentPlayer().action(this);
 
+        ifFinished();
+    }
+
+    private void ifFinished() {
+        if (getCurrentPlayer().getDeck().isEmpty()) {
+            System.out.println(currentPlayer.getId());
+            winner = currentPlayer;
+            hasFinished = true;
+            players.remove(currentPlayer);
+        }
         if (!sack.isExtractable()) {
             winner = getCurrentPlayer();
             for (Player player : players) {
