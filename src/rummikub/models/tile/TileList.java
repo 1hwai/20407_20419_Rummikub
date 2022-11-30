@@ -1,5 +1,7 @@
 package rummikub.models.tile;
 
+import rummikub.models.Table;
+
 import java.util.ArrayList;
 
 public class TileList extends ArrayList<Tile> implements TileListValidator {
@@ -45,6 +47,7 @@ public class TileList extends ArrayList<Tile> implements TileListValidator {
     @Override
     public boolean isSIB() {
         ArrayList<TileType> types = new ArrayList<>();
+        if (contains(Table.EMPTY)) return false;
         int number = 1;
         for (Tile tile : this) {
             if (!tile.isJoker()) {
